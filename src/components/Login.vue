@@ -7,7 +7,7 @@
                    style="margin-top:8%;margin-bottom:14%;width: 200%;height: 80%;vertical-align: center">
             <h1 style="color: #409EFF;text-align: center">登录</h1>
             <el-form ref="loginForm" :rules="rules" :model="loginForm" label-width="20%">
-              <el-form-item label="用户名" prop="userName" required>
+              <el-form-item label="学号/工号" prop="userName" required>
                 <el-input v-model="loginForm.userName" type="text" autocomplete="off" placeholder="请输入用户名" clearable
                           size="medium" style="width: 90%"></el-input>
               </el-form-item>
