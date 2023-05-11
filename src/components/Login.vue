@@ -7,8 +7,8 @@
                    style="margin-top:8%;margin-bottom:14%;width: 200%;height: 80%;vertical-align: center">
             <h1 style="color: #409EFF;text-align: center">登录</h1>
             <el-form ref="loginForm" :rules="rules" :model="loginForm" label-width="20%">
-              <el-form-item label="学号/工号" prop="userName" required>
-                <el-input v-model="loginForm.userName" type="text" autocomplete="off" placeholder="请输入用户名" clearable
+              <el-form-item label="学号/工号" prop="number" required>
+                <el-input v-model="loginForm.number" type="text" autocomplete="off" placeholder="请输入用户名" clearable
                           size="medium" style="width: 90%"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password" required>
@@ -35,8 +35,6 @@
   </template>
   
   <script>
-  import Vue from "vue";
-  
   export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Login",
@@ -44,132 +42,78 @@
       return {
         user: {},
         loginForm: {
-          userName: '',
+          number: '',
           password: '',
-          role: 'student'
+        //   role: 'student'
         },
-        rules: { //prop的名字必须和uer中的名字一样！！！
-          userName: [
-            { required: true, message: '请输入用户名', trigger: 'blur' }
+        rules: { //prop的名字必须和rules中的名字一样！！！
+          number: [
+            { required: true, message: '请输入学号/工号', trigger: 'blur' }
           ],
           password: [
             { required: true, message: '请输入密码'}
           ],
-          role: [
-            { required: true, message: '请选择角色'}
-          ],
+        //   role: [
+        //     { required: true, message: '请选择角色'}
+        //   ],
         },
-        roleOptions: [{
-          value: 'student',
-          label: '学生'
-        }, {
-          value: 'teacher',
-          label: '教师',
-        }],
+        // roleOptions: [{
+        //   value: 'student',
+        //   label: '学生'
+        // }, {
+        //   value: 'teacher',
+        //   label: '教师',
+        // }],
       }
     },
     created() {
-      if(Vue.$cookies.get("role") === "teacher"){
-        this.$router.push({name: 'TeacherLogin', params: {isReload: 'true'}});
-      }
-      if(Vue.$cookies.get("userName") !== null && Vue.$cookies.get("role") === "student") {
+    //   if(Vue.$cookies.get("role") === "teacher"){
+    //     this.$router.push({name: 'TeacherLogin', params: {isReload: 'true'}});
+    //   }
+      if(this.$store.state.isLogin) {
         this.$router.push({name: 'Home', params: {isReload: 'true'}});
       }
   
-      if (this.$route.params.isReload === 'true') {
-        this.$router.go(0);
-      }
+    //   if (this.$route.params.isReload === 'true') {
+    //     this.$router.go(0);
+    //   }
     },
     methods: {
       onLogin: function () {
         const _this = this
-  
-        // let formData = new FormData();
-        // formData.append('userName', _this.loginForm.userName);
-        // formData.append('password', _this.loginForm.password);
-        // formData.append('role',_this.loginForm.role)
-        // this.$axios.post('/user/login', formData, {
-        //   headers: {
-        //     "Content-Type": "application/json;charset=utf-8"
-        //   },
-        //   withCredentials: true
-        // }).then(function (response) {
-        //   // 这里是处理正确的回调
-        //   if (response.data.code === '0') {
-        if (_this.loginForm.userName === '123' && _this.loginForm.password == '123') {
-            Vue.$cookies.set("userName", _this.loginForm.userName, "1D");
-            // Vue.$cookies.set("userId", response.data.data.userId, "1D");
-            Vue.$cookies.set("password", _this.loginForm.password, "1D");
-            // Vue.$cookies.set("realName", response.data.data.realName, "1D");
-            // Vue.$cookies.set("phone", response.data.data.phone, "1D");
-            // Vue.$cookies.set("email", response.data.data.email, "1D");
-            // Vue.$cookies.set("description", response.data.data.description, "1D");
-            // Vue.$cookies.set("sex", response.data.data.sex, "1D");
-            // Vue.$cookies.set("role", response.data.data.role, "1D");
-            // if(response.data.data.logoImage != null){
-            //   Vue.$cookies.set("logoImage", response.data.data.logoImage, "1D");
-            // }else{
-              Vue.$cookies.set("logoImage", "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png", "1D");
-            // }
-  
-            let flag = true;
-            _this.$store.commit('login', flag);
-            _this.$router.push({name: 'Home', params: {isReload: 'true'}});
-          }else{
-            // _this.$message.error(response.data.msg);
-            _this.$message.error('账号或密码错误');
-          }
-        // }).catch(function (response) {
-        //   // 这里是处理错误的回调
-        //   console.log(response)
-        // });
-      },
-      toRegister: function () {
-        if (this.$route.path !== "/register") {
-          this.$router.push("/register");
-        }
-      },
-      onLogout: function () {
-        const _this = this;
-        this.$axios.post('/user/logout',{},{
+        let formData = new FormData();
+        formData.append('number', _this.loginForm.number);
+        formData.append('password', _this.loginForm.password);
+        this.$axios.post('/user/stu/login', formData, {
           headers: {
             "Content-Type": "application/json;charset=utf-8"
           },
           withCredentials: true
         }).then(function (response) {
           // 这里是处理正确的回调
-          if(response.data.code === '503'){
-            _this.$message({
-              message: '您未登录！',
-              type: 'success'
-            });
+          if (response.data.code === '0000') {
+            //将用户名放入sessionStorage中
+            sessionStorage.setItem("user", JSON.stringify(response.data.data));
+            sessionStorage.setItem("userToken", response.data.data.userToken)
+
+            //将用户名放入vuex中
+            _this.$store.dispatch("setUser", JSON.stringify(response.data.data));
+            _this.$store.dispatch("setToken", response.data.data.userToken);
+            _this.$router.push({name: 'Home', params: {isReload: 'true'}});
           }else{
-            if(response.data.code === '0'){
-              let flag = false;
-              _this.$store.commit('login', flag);
-              let role = Vue.$cookies.get('role');
-  
-              const cookies = Vue.$cookies.keys();
-              for (let i = 0; i < cookies.length; i++) {
-                Vue.$cookies.remove(cookies[i])
-              }
-  
-              console.log(_this.$route.path);
-              _this.$message({
-                message: '登出成功！',
-                type: 'success'
-              });
-              if(role === 'student')
-                _this.$router.push({name:"Login",params:{isReload: 'true',msg: '登出成功！'}});
-              else
-                _this.$router.push({name:"TeacherLogin",params:{isReload: 'true',msg: '登出成功！'}});
-            }
+            _this.$message.error('账号或密码错误');
           }
         }).catch(function (response) {
           // 这里是处理错误的回调
           console.log(response)
-        })
+        });
       },
+
+    //   toRegister: function () {
+    //     if (this.$route.path !== "/register") {
+    //       this.$router.push("/register");
+    //     }
+    //   },
     }
   }
   </script>
