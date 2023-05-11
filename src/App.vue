@@ -27,8 +27,8 @@
               </el-col>
             </el-col>
             <el-col :span="4" style="min-height: 100%">
-              <div style="color: white; margin-top: 17px">
-                
+              <div style="color: white; margin-top: 17px; margin-left:20px">
+                学生端
               </div>
             </el-col>
             <el-col :span="9" style="min-height: 100%">
@@ -155,117 +155,146 @@
     components:{ChangePhoto},
     data() {
       return {
-        activeIndex: "1",
         photoFlag:false
       }
+    },
+    created() {
+        //每次刷新时vuex中数据丢失，再从session中获取
+        this.isLogin();
+        this.ver();
     },
     computed: {
       // 计算属性的 getter
       getUsername: function () {
-        if(Vue.$cookies.get('userName') == null){
+        if(!this.$store.state.isLogin){
           return "未登录";
         }else{
-          return Vue.$cookies.get('userName');
+          return this.$store.state.name;
         }
       },
       getLoginState: function (){
-        return Vue.$cookies.get('userName') != null;
+        return this.$store.state.isLogin;
       },
       getPhotoUrl: function(){
-        if(Vue.$cookies.get('logoImage') !== "null") {
-          return Vue.$cookies.get('logoImage');
-        }
-        else{
+        // if(Vue.$cookies.get('logoImage') !== "null") {
+        //   return Vue.$cookies.get('logoImage');
+        // }
+        // else{
           return "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        }
+        // }
       },
       getRole: function(){
-        return Vue.$cookies.get('role') !== "student";
+        return Vue.$cookies.get('role') !== "student"; //TODO
       },
       isTeacher: function(){
-        return Vue.$cookies.get('role') === "teacher";
+        return Vue.$cookies.get('role') === "teacher";//TODO
       },
   
     },
   
     methods: {
-      toLogin: function () {
-        console.log(this.$route.path);
-        if (this.$route.path !== "/login") {
-          this.$router.push("/login");
-        }
-      },
-      onLogout: function () {
-        const _this = this;
-        // this.$axios.post('/user/logout',{},{
-        //   headers: {
-        //     "Content-Type": "application/json;charset=utf-8"
-        //   },
-        //   withCredentials: true
-        // }).then(function (response) {
-        //   // 这里是处理正确的回调
-        //   if(response.data.code === '503'){
-        //     _this.$message({
-        //       message: '您未登录！',
-        //       type: 'success'
-        //     });
-        //   }else{
-            // if(response.data.code === '0'){
-              let flag = false;
-              _this.$store.commit('login', flag);
-            //   let role = Vue.$cookies.get('role');
+        //判断是否已经登录状态
+        isLogin() {
+            //判断sessionStorage中是否有登录信息
+            if (sessionStorage.getItem("user") != null && sessionStorage.getItem("userToken")) {
+                //存在登录信息就从sessionStorage中提取状态再传值给vuex中
+                this.$store.commit("userStatus", sessionStorage.getItem("user"));
+            } else {
+                //登录不成功就将vuex中的state清空
+                this.$store.commit("userStatus", null);
+            }
+            //返回登录状态islogin
+            return this.$store.getters.isLogin;
+        },
+        //通过登录状态来判断用户是否登录执行相关的操作
+        ver() {
+            if (this.$store.state.isLogin) {
+                this.$notify({
+                    title: '系统提示',
+                    message: '欢迎用户：' + this.$store.state.number + this.$store.state.name,
+                    position: 'bottom-right',
+                    type: 'success', //提醒类型
+                    duration: 2000  //持续时间
+                });
+            } else {
+                //如果没有登录就返回登录界面
+                this.$router.push("/");
+                // this.$message({
+                //     message: '警告，请登录账户',
+                //     type: 'warning'
+                // });
+            }
+        },
+
+        onLogout: function () {
+            const _this = this;
+            let formData = new FormData()
+            formData.append('id', JSON.parse(sessionStorage.getItem('user')).id)
+            console.log(formData)
+            this.$axios.post('/user/stu/logout',formData,{
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+                withCredentials: true
+            }).then(function (response) {
+                if(response.data.code === '0000'){
+                    //删除vuex中存储的用户信息
+                    _this.$store.dispatch('setUser', null)
+                    //删除session中存储的信息
+                    sessionStorage.clear()
+                    //删除cookie中存储的信息
+                    const cookies = Vue.$cookies.keys();
+                    for (let i = 0; i < cookies.length; i++) {
+                        Vue.$cookies.remove(cookies[i])
+                    }
   
-              const cookies = Vue.$cookies.keys();
-              for (let i = 0; i < cookies.length; i++) {
-                Vue.$cookies.remove(cookies[i])
-              }
+                    _this.$message({
+                        message: '登出成功！',
+                        type: 'success',
+                        duration: 2000
+                    });
+                    _this.$router.push({name:"Login",params:{isReload: 'true',msg: '登出成功！'}});
+                }
+            }).catch(function (response) {
+                // 这里是处理错误的回调
+                console.log(response)
+            })
+        },
+
+        // toRegister: function () {
+        //     let flag = false;
+        //     this.$store.commit('login', flag);
+        //     // localStorage.clear();
+        //     const cookies = Vue.$cookies.keys();
+        //     for (let i = 0; i < cookies.length; i++) {
+        //         Vue.$cookies.remove(cookies[i])
+        //     }
   
-              console.log(_this.$route.path);
-              _this.$message({
-                message: '登出成功！',
-                type: 'success'
-              });
-            //   if(role === 'student')
-                _this.$router.push({name:"Login",params:{isReload: 'true',msg: '登出成功！'}});
-            //   else
-            //     _this.$router.push({name:"TeacherLogin",params:{isReload: 'true',msg: '登出成功！'}});
-            // }
-        //   }
-        // }).catch(function (response) {
-        //   // 这里是处理错误的回调
-        //   console.log(response)
-        // })
-      },
-      toRegister: function () {
-        let flag = false;
-        this.$store.commit('login', flag);
-        // localStorage.clear();
-        const cookies = Vue.$cookies.keys();
-        for (let i = 0; i < cookies.length; i++) {
-          Vue.$cookies.remove(cookies[i])
-        }
-  
-        console.log(this.$route.path);
-        if (this.$route.path !== "/register") {
-          this.$router.push({name:"Register",params:{isReload: 'true'}});
-        }
-      },
-      toHome: function () {
-        if (this.$route.path !== "/home") {
-          this.$router.push({name:"Home",params:{isReload: 'true'}});
-        }
-      },
-      ChangePhoto: function(){
-        this.photoFlag = true;
-      },
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
+        //     console.log(this.$route.path);
+        //     if (this.$route.path !== "/register") {
+        //         this.$router.push({name:"Register",params:{isReload: 'true'}});
+        //     }
+        // },
+
+        toHome: function () {
+            if (this.$route.path !== "/home") {
+                this.$router.push({name:"Home",params:{isReload: 'true'}});
+            }
+        },
+
+        ChangePhoto: function(){
+            this.photoFlag = true;
+        },
+      
+        handleOpen(key, keyPath) {
+            console.log(key, keyPath);
+        },
+
+        handleClose(key, keyPath) {
+            console.log(key, keyPath);
+        },
     }
-  }
+}
   </script>
   
   <style scoped>
