@@ -96,12 +96,24 @@
                     @open="handleOpen"
                     @close="handleClose"
                 >
-                  <el-menu-item v-if="!isTeacher" class="submenu" index="/sceneView">
+                  <el-submenu index="1">
                     <template v-slot:title>
-                      <i class="el-icon-zoom-in"></i>
+                      <i class="el-icon-location"></i>
                       <span>选课系统</span>
                     </template>
-                  </el-menu-item>
+                    <el-menu-item v-if="!isTeacher" class="submenu" index="/course_select/schedule">
+                      <template v-slot:title>
+                        <i class="el-icon-zoom-in"></i>
+                        <span>课程表</span>
+                      </template>
+                    </el-menu-item>
+                    <el-menu-item v-if="!isTeacher" class="submenu" index="/course_select/select">
+                      <template v-slot:title>
+                        <i class="el-icon-zoom-in"></i>
+                        <span>选课</span>
+                      </template>
+                    </el-menu-item>
+                  </el-submenu>
                   <el-menu-item v-if="!isTeacher" class="submenu" index="/courseSelect">
                     <template v-slot:title>
                       <i class="el-icon-document"></i>
