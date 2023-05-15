@@ -73,12 +73,12 @@
           // 这里是处理正确的回调
           if (response.data.code === '0000') {
             //将用户名放入sessionStorage中
-            sessionStorage.setItem("user", JSON.stringify(response.data.data));
-            sessionStorage.setItem("userToken", response.data.data.userToken);
-            sessionStorage.setItem("photoUrl", response.data.data.photoUrl);
+            sessionStorage.setItem("sys", JSON.stringify(response.data.data));
+            sessionStorage.setItem("sysToken", response.data.data.userToken);
+            // sessionStorage.setItem("photoUrl", response.data.data.photoUrl);
 
             //将用户名放入vuex中
-            _this.$store.dispatch("setUser", JSON.stringify(response.data.data));
+            _this.$store.dispatch("setSys", JSON.stringify(response.data.data));
             _this.$store.dispatch("setToken", response.data.data.userToken);
             _this.$router.push({name: 'Home', params: {isReload: 'true'}});
           }else{
