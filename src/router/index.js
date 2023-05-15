@@ -5,6 +5,7 @@ import Register from "@/components/Register";
 import VueCookies from 'vue-cookies';
 import Home from "@/components/Home";
 import SysLogin from "@/components/SysLogin"
+import SysHome from "@/components/SysHome";
 
 
 Vue.use(VueRouter)
@@ -36,6 +37,11 @@ const routes = [
         path: '/sysLogin',
         name: 'SysLogin',
         component: SysLogin
+    },
+    {
+        path: '/sysHome',
+        name: 'SysHome',
+        component: SysHome
     }
 ];
 
