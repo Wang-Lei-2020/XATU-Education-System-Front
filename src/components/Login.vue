@@ -8,7 +8,7 @@
             <h1 style="color: #409EFF;text-align: center">登录</h1>
             <el-form ref="loginForm" :rules="rules" :model="loginForm" label-width="20%">
               <el-form-item label="学号/工号" prop="number" required>
-                <el-input v-model="loginForm.number" type="text" autocomplete="off" placeholder="请输入用户名" clearable
+                <el-input v-model="loginForm.number" type="text" autocomplete="off" placeholder="请输入学号/工号" clearable
                           size="medium" style="width: 90%"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password" required>
@@ -95,6 +95,7 @@
             //将用户名放入sessionStorage中
             sessionStorage.setItem("user", JSON.stringify(response.data.data));
             sessionStorage.setItem("userToken", response.data.data.userToken);
+            sessionStorage.setItem("role", "student");
             sessionStorage.setItem("photoUrl", response.data.data.photoUrl);
 
             //将用户名放入vuex中

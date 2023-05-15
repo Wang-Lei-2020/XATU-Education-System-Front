@@ -12,7 +12,7 @@
       <el-container>
         <el-header class="header">
           <!-- 学生端系统的header -->
-          <el-row v-if="this.$route.path !== '/TeacherLogin' && this.$route.path !== '/TeacherRegister' && !isTeacher"
+          <el-row v-if="this.$route.path !== '/TeacherLogin' && !isTeacher"
                   style="height: 100%; background-color: #324b4e; width: 100%;">
             <el-col :span="2" style="min-height: 100%">
             </el-col>
@@ -26,9 +26,14 @@
                 </div>
               </el-col>
             </el-col>
-            <el-col :span="4" style="min-height: 100%">
+            <el-col v-if= !isSysLoginPath :span="4" style="min-height: 100%">
               <div style="color: white; margin-top: 17px; margin-left:20px">
                 学生端
+              </div>
+            </el-col>
+            <el-col v-if= isSysLoginPath :span="4" style="min-height: 100%">
+              <div style="color: white; margin-top: 17px; margin-left:20px">
+                系统管理端
               </div>
             </el-col>
             <el-col :span="9" style="min-height: 100%">
@@ -184,12 +189,14 @@
         }
       },
       getRole: function(){
-        return Vue.$cookies.get('role') !== "student"; //TODO
+        return sessionStorage.getItem("role");
       },
       isTeacher: function(){
-        return Vue.$cookies.get('role') === "teacher";//TODO
+        return sessionStorage.getItem("role") === "teacher";
       },
-  
+      isSysLoginPath: function(){
+        return this.$route.path === "/sysLogin";
+      }
     },
   
     methods: {
@@ -208,21 +215,34 @@
         },
         //通过登录状态来判断用户是否登录执行相关的操作
         ver() {
-            if (this.$store.state.isLogin) {
-                this.$notify({
-                    title: '系统提示',
-                    message: '欢迎用户：' + this.$store.state.number + this.$store.state.name,
-                    position: 'bottom-right',
-                    type: 'success', //提醒类型
-                    duration: 2000  //持续时间
-                });
-            } else {
-                //如果没有登录就返回登录界面
-                this.$router.push("/");
-                // this.$message({
-                //     message: '警告，请登录账户',
-                //     type: 'warning'
-                // });
+            if (this.$route.path !== "/sysLogin") {
+                if (this.$store.state.isLogin) {
+                    this.$notify({
+                        title: '系统提示',
+                        message: '欢迎用户：' + this.$store.state.number + this.$store.state.name,
+                        position: 'bottom-right',
+                        type: 'success', //提醒类型
+                        duration: 2000  //持续时间
+                    });
+                } else {
+                    //如果没有登录就返回登录界面
+                    this.$router.push("/");
+                    // this.$message({
+                    //         message: '警告，请登录账户',
+                    //         type: 'warning'
+                    // });
+                }
+            }
+            else {
+                //删除vuex中存储的用户信息
+                this.$store.dispatch('setUser', null)
+                //删除session中存储的信息
+                sessionStorage.clear()
+                //删除cookie中存储的信息
+                const cookies = Vue.$cookies.keys();
+                for (let i = 0; i < cookies.length; i++) {
+                    Vue.$cookies.remove(cookies[i])
+                }
             }
         },
 
