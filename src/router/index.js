@@ -7,6 +7,8 @@ import Home from "@/components/Home";
 import SysLogin from "@/components/SysLogin"
 import CourseSchedule from '@/components/CourseSchedule';
 import CourseSelect from '@/components/CourseSelect';
+import SysHome from "@/components/SysHome";
+
 
 
 Vue.use(VueRouter)
@@ -48,6 +50,11 @@ const routes = [
         path: '/course_select/schedule',
         name: 'CourseSchedule',
         component: CourseSchedule
+    },
+    {
+        path: '/sysHome',
+        name: 'SysHome',
+        component: SysHome
     }
 ];
 
