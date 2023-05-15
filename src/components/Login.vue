@@ -94,7 +94,8 @@
           if (response.data.code === '0000') {
             //将用户名放入sessionStorage中
             sessionStorage.setItem("user", JSON.stringify(response.data.data));
-            sessionStorage.setItem("userToken", response.data.data.userToken)
+            sessionStorage.setItem("userToken", response.data.data.userToken);
+            sessionStorage.setItem("photoUrl", response.data.data.photoUrl);
 
             //将用户名放入vuex中
             _this.$store.dispatch("setUser", JSON.stringify(response.data.data));

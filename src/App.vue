@@ -176,12 +176,12 @@
         return this.$store.state.isLogin;
       },
       getPhotoUrl: function(){
-        // if(Vue.$cookies.get('logoImage') !== "null") {
-        //   return Vue.$cookies.get('logoImage');
-        // }
-        // else{
+        if(sessionStorage.getItem("photoUrl") !== "null") {
+          return sessionStorage.getItem("photoUrl");
+        }
+        else{
           return "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        // }
+        }
       },
       getRole: function(){
         return Vue.$cookies.get('role') !== "student"; //TODO
