@@ -5,6 +5,12 @@ import Register from "@/components/Register";
 import VueCookies from 'vue-cookies';
 import Home from "@/components/Home";
 import SysLogin from "@/components/SysLogin"
+import CoursePlatform from "@/components/homework/CoursePlatform";
+import CoursePage from "@/components/homework/CoursePage";
+import HomePage from "@/components/homework/HomePage";
+import HomeworkList from "@/components/homework/HomeworkList";
+import CourseInfo from "@/components/homework/CourseInfo";
+import test from "@/components/TestMain";
 import CourseSchedule from '@/components/CourseSchedule';
 import CourseSelect from '@/components/CourseSelect';
 import SysHome from "@/components/SysHome";
@@ -55,7 +61,36 @@ const routes = [
         path: '/sysHome',
         name: 'SysHome',
         component: SysHome
+    },
+    {
+        path: '/courseplatform',
+        name: 'CoursePlatform',
+        component: CoursePlatform
+    },
+    {
+        path: '/coursepage',
+        name: 'CoursePage',
+        component: CoursePage,
+        children: [{
+            path: '/coursepage/homepage',
+            name: 'HomePage',
+            component: HomePage
+        },
+        {
+            path: '/coursepage/info',
+            name: 'CourseInfo',
+            component: CourseInfo
+        }, {
+            path: '/coursepage/homeworklist',
+            name: 'HomeworkList',
+            component: HomeworkList
+        }]
+    },{
+        path: '/test',
+        name: 'test',
+        component: test,
     }
+
 ];
 
 const router = new VueRouter({
