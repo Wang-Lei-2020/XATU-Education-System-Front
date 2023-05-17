@@ -10,7 +10,6 @@ import CoursePage from "@/components/homework/CoursePage";
 import HomePage from "@/components/homework/HomePage";
 import HomeworkList from "@/components/homework/HomeworkList";
 import CourseInfo from "@/components/homework/CourseInfo";
-import test from "@/components/TestMain";
 import CourseSchedule from '@/components/CourseSchedule';
 import CourseSelect from '@/components/CourseSelect';
 import SysHome from "@/components/SysHome";
@@ -85,10 +84,6 @@ const routes = [
             name: 'HomeworkList',
             component: HomeworkList
         }]
-    },{
-        path: '/test',
-        name: 'test',
-        component: test,
     }
 
 ];
