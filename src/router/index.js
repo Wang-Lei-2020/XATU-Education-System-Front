@@ -4,10 +4,11 @@ import Login from "@/components/Login";
 import Register from "@/components/Register";
 import VueCookies from 'vue-cookies';
 import Home from "@/components/Home";
-import SysLogin from "@/components/SysLogin"
+import SysLogin from "@/components/sys/SysLogin"
 import CourseSchedule from '@/components/CourseSchedule';
 import CourseSelect from '@/components/CourseSelect';
-import SysHome from "@/components/SysHome";
+import SysHome from "@/components/sys/SysHome";
+import SysStudent from "@/components/sys/SysStudent";
 
 
 
@@ -55,6 +56,11 @@ const routes = [
         path: '/sysHome',
         name: 'SysHome',
         component: SysHome
+    },
+    {
+        path: '/sysStudent',
+        name: 'SysStudent',
+        component: SysStudent
     }
 ];
 
