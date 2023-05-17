@@ -16,7 +16,11 @@ Vue.use(ElementUI)
 Vue.use(VueSession)
 Vue.use(VueAxios, axios)
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:8902'
+if(process.env.NODE_ENV === 'development') {
+    axios.defaults.baseURL = 'http://localhost:8902'
+} else {
+    axios.defaults.baseURL = 'http://114.116.194.209:8902'
+}
 Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false

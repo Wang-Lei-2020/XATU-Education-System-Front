@@ -119,7 +119,7 @@
                       </template>
                     </el-menu-item>
                   </el-submenu>
-                  <el-menu-item v-if="!isTeacher" class="submenu" index="/courseSelect">
+                  <el-menu-item v-if="!isTeacher" class="submenu" index="/courseplatform">
                     <template v-slot:title>
                       <i class="el-icon-document"></i>
                       <span>课程平台</span>
