@@ -1,15 +1,17 @@
 <template>
     <div>
-    这里是主页
+      <Chat />
     </div>
 </template>
 
 <script>
-
+import Chat from '@/components/chat';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Home",
-  components:{},
+  components:{
+    Chat
+  },
   computed: {},
   created() {
     if (this.$route.params.isReload === 'true') {
