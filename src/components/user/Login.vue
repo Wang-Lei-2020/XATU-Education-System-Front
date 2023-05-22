@@ -15,15 +15,14 @@
                 <el-input v-model="loginForm.password" type="password" autocomplete="off" placeholder="请输入密码" clearable
                           size="medium" style="width: 90%"></el-input>
               </el-form-item>
-  <!--            <el-form-item label="角色" prop="role" required>-->
-  <!--              <el-select v-model="loginForm.role" placeholder="请选择角色" style="width: 90%">-->
-  <!--                <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value" >-->
-  <!--                </el-option>-->
-  <!--              </el-select>-->
-  <!--            </el-form-item>-->
+             <el-form-item label="角色" prop="role" required>
+               <el-select v-model="loginForm.role" placeholder="请选择角色" style="width: 90%">
+                 <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value" >
+                 </el-option>
+               </el-select>
+             </el-form-item>
               <el-form-item label-width="0">
                 <el-button type="primary" @click="onLogin" style="margin-left: 37%;width:150px">登录</el-button>
-                <!-- <el-button type="success" @click="toRegister" style="float: right;margin-right: 20%;width:100px">注册</el-button> -->
                 <div class="clearBox"></div>
               </el-form-item>
             </el-form>
@@ -53,23 +52,20 @@
           password: [
             { required: true, message: '请输入密码'}
           ],
-        //   role: [
-        //     { required: true, message: '请选择角色'}
-        //   ],
+          role: [
+            { required: true, message: '请选择角色'}
+          ],
         },
-        // roleOptions: [{
-        //   value: 'student',
-        //   label: '学生'
-        // }, {
-        //   value: 'teacher',
-        //   label: '教师',
-        // }],
+        roleOptions: [{
+          value: 'student',
+          label: '学生'
+        }, {
+          value: 'teacher',
+          label: '教师',
+        }],
       }
     },
     created() {
-    //   if(Vue.$cookies.get("role") === "teacher"){
-    //     this.$router.push({name: 'TeacherLogin', params: {isReload: 'true'}});
-    //   }
       if(this.$store.state.isLogin) {
         this.$router.push({name: 'Home', params: {isReload: 'true'}});
       }
@@ -80,6 +76,15 @@
     },
     methods: {
       onLogin: function () {
+        const _this = this;
+        if (_this.loginForm.role === "student") {
+            _this.onStuLogin();
+        }
+        else if (_this.loginForm.role === "teacher") {
+            _this.onTeaLogin();
+        }
+      },
+      onStuLogin: function () {
         const _this = this
         let formData = new FormData();
         formData.append('number', _this.loginForm.number);
@@ -110,12 +115,37 @@
           console.log(response)
         });
       },
+      onTeaLogin: function () {
+        const _this = this
+        let formData = new FormData();
+        formData.append('number', _this.loginForm.number);
+        formData.append('password', _this.loginForm.password);
+        this.$axios.post('/user/tea/login', formData, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          },
+          withCredentials: true
+        }).then(function (response) {
+          // 这里是处理正确的回调
+          if (response.data.code === '0000') {
+            //将用户名放入sessionStorage中
+            sessionStorage.setItem("user", JSON.stringify(response.data.data));
+            sessionStorage.setItem("userToken", response.data.data.userToken);
+            sessionStorage.setItem("role", "teacher");
+            sessionStorage.setItem("photoUrl", response.data.data.photoUrl);
 
-    //   toRegister: function () {
-    //     if (this.$route.path !== "/register") {
-    //       this.$router.push("/register");
-    //     }
-    //   },
+            //将用户名放入vuex中
+            _this.$store.dispatch("setUser", JSON.stringify(response.data.data));
+            _this.$store.dispatch("setToken", response.data.data.userToken);
+            _this.$router.push({name: 'Home', params: {isReload: 'true'}});
+          }else{
+            _this.$message.error('账号或密码错误');
+          }
+        }).catch(function (response) {
+          // 这里是处理错误的回调
+          console.log(response)
+        });
+      },
     }
   }
   </script>

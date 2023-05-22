@@ -76,7 +76,7 @@
             sessionStorage.setItem("user", JSON.stringify(response.data.data));
             sessionStorage.setItem("userToken", response.data.data.userToken);
             sessionStorage.setItem("role", "system");
-            // sessionStorage.setItem("photoUrl", response.data.data.photoUrl);
+            sessionStorage.setItem("photoUrl", null);
 
             //将用户名放入vuex中
             _this.$store.dispatch("setUser", JSON.stringify(response.data.data));
