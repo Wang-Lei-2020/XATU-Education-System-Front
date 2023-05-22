@@ -60,10 +60,10 @@
     methods: {
       changePhoto:function(){
         const _this = this
-        this.$axios.post('/user/stu/changePhoto', {
-          "id": JSON.parse(sessionStorage.getItem('user')).id,
-          "photoUrl":_this.uploadPicUrl,
-        }, {
+        const formData = new FormData()
+        formData.append('id', JSON.parse(sessionStorage.getItem('user')).id);
+        formData.append('photoUrl', _this.uploadPicUrl);
+        this.$axios.post('/user/stu/changePhoto', formData, {
           headers: {
             "Content-Type": "application/json;charset=utf-8"
           },
