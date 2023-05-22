@@ -25,9 +25,19 @@
                         </div>
                     </el-col>
                 </el-col>
-                <el-col :span="4" style="min-height: 100%">
+                <el-col v-if="!getLoginState" :span="4" style="min-height: 100%">
+                    <div style="color: white; margin-top: 17px; margin-left:20px">
+                        用户端
+                    </div>
+                </el-col>
+                <el-col v-if="getLoginState && isStudent" :span="4" style="min-height: 100%">
                     <div style="color: white; margin-top: 17px; margin-left:20px">
                         学生端
+                    </div>
+                </el-col>
+                <el-col v-if="getLoginState && isTeacher" :span="4" style="min-height: 100%">
+                    <div style="color: white; margin-top: 17px; margin-left:20px">
+                        教师端
                     </div>
                 </el-col>
                 <el-col :span="9" style="min-height: 100%"></el-col>
@@ -74,8 +84,7 @@
                                 {{getUsername}}
                             </template>
                             <el-menu-item index="2-1" v-on:click="toHome">主页</el-menu-item>
-                            <el-menu-item index="2-2" v-on:click="ChangePhoto">修改头像</el-menu-item>
-                            <el-menu-item index="2-3" v-on:click="onLogout">注销</el-menu-item>
+                            <el-menu-item index="2-2" v-on:click="onLogout">注销</el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-col>
@@ -137,6 +146,44 @@
                 <router-view></router-view>
             </el-col>
         </el-main>
+
+        <!-- 系统端的侧边栏 -->
+        <el-main v-if="getLoginState && isSystem" class="main">
+            <el-col :span="4">
+                <el-row class="tac">
+                    <el-menu router :default-active="this.$route.path" >
+                        <el-menu-item class="submenu" index="/courseplatform">
+                            <template v-slot:title>
+                                <i class="el-icon-document"></i>
+                                <span>学生信息</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item class="submenu" index="/evaluation">
+                            <template v-slot:title>
+                                <i class="el-icon-edit"></i>
+                                <span>教师信息</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item class="submenu" index="/schedule">
+                            <template v-slot:title>
+                                <i class="el-icon-pie-chart"></i>
+                                <span>课程信息</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item class="submenu" index="/userInfo">
+                            <template v-slot:title>
+                                <i class="el-icon-info"></i>
+                                <span>课堂信息</span>
+                            </template>
+                        </el-menu-item>
+                    </el-menu>
+                </el-row>
+            </el-col>
+            <el-col v-if="getLoginState" :span="20">
+                <router-view></router-view>
+            </el-col>
+        </el-main>
+
         <el-main v-if="!getLoginState" class="main">
             <router-view></router-view>
         </el-main>
