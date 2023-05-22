@@ -4,7 +4,8 @@
         <el-dialog
             title="修改头像"
             :visible="photoFlag"
-            width="40%">
+            width="40%"
+            @close="closeChangePhoto">
           <ChangePhoto></ChangePhoto>
         </el-dialog>
       </div>
@@ -316,6 +317,10 @@
 
         ChangePhoto: function(){
             this.photoFlag = true;
+        },
+
+        closeChangePhoto: function(){
+            this.photoFlag = false;
         },
       
         handleOpen(key, keyPath) {
