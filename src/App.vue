@@ -12,160 +12,146 @@
 
       <el-container>
         <el-header class="header">
-          <!-- 学生端系统的header -->
-          <el-row v-if="this.$route.path !== '/TeacherLogin' && !isTeacher"
-                  style="height: 100%; background-color: #324b4e; width: 100%;">
-            <el-col :span="2" style="min-height: 100%">
-            </el-col>
-            <el-col :span="5" style="min-height: 100%" >
-              <el-col :span="3" style="min-height: 100%; min-width: 60px">
-                <img style="height: 56px;margin-right: 8%; cursor:pointer;" src="./assets/logo.png" alt="logo" @click="toHome" >
-              </el-col>
-              <el-col :span="18" style="min-height: 100%">
-                <div style="color: gold; margin-top: 17px; cursor:pointer; font-size: 15px;"  @click="toHome">
-                  雄安交通职业技术学院教务系统
-                </div>
-              </el-col>
-            </el-col>
-            <el-col v-if= !isSysLoginPath :span="4" style="min-height: 100%">
-              <div style="color: white; margin-top: 17px; margin-left:20px">
-                学生端
-              </div>
-            </el-col>
-            <el-col v-if= isSysLoginPath :span="4" style="min-height: 100%">
-              <div style="color: white; margin-top: 17px; margin-left:20px">
-                系统管理端
-              </div>
-            </el-col>
-            <el-col :span="9" style="min-height: 100%">
-            </el-col>
-            <el-col :span="2" style="min-height: 100%">
-              <el-menu v-if="getLoginState" style="background-color: transparent" mode="horizontal">
-                    <el-submenu index="1" style="float: left;">
-                      <template v-slot:title>
-                        <el-avatar :src="getPhotoUrl"></el-avatar>
-                        {{getUsername}}
-                      </template>
-                      <el-menu-item index="3-1" v-on:click="toHome">主页</el-menu-item>
-                      <el-menu-item index="3-2" v-on:click="ChangePhoto">修改头像</el-menu-item>
-                      <el-menu-item index="3-3" v-on:click="onLogout">注销</el-menu-item>
-                    </el-submenu>
-              </el-menu>
-            </el-col>
-          </el-row>
+            <!-- 学生教师端系统的header -->
+            <el-row v-if="!isSystem" style="height: 100%; background-color: #324b4e; width: 100%;">
+                <el-col :span="2" style="min-height: 100%"></el-col>
+                <el-col :span="5" style="min-height: 100%" >
+                    <el-col :span="3" style="min-height: 100%; min-width: 60px">
+                        <img style="height: 56px;margin-right: 8%; cursor:pointer;" src="./assets/logo.png" alt="logo" @click="toHome" >
+                    </el-col>
+                    <el-col :span="18" style="min-height: 100%">
+                        <div style="color: gold; margin-top: 17px; font-size: 15px;"  @click="toHome">
+                            雄安交通职业技术学院教务系统
+                        </div>
+                    </el-col>
+                </el-col>
+                <el-col :span="4" style="min-height: 100%">
+                    <div style="color: white; margin-top: 17px; margin-left:20px">
+                        学生端
+                    </div>
+                </el-col>
+                <el-col :span="9" style="min-height: 100%"></el-col>
+                <el-col :span="2" style="min-height: 100%">
+                    <el-menu v-if="getLoginState" style="background-color: transparent" mode="horizontal">
+                        <el-submenu index="1" style="float: left;">
+                            <template v-slot:title>
+                                <el-avatar :src="getPhotoUrl"></el-avatar>
+                                {{getUsername}}
+                            </template>
+                            <el-menu-item index="2-1" v-on:click="toHome">主页</el-menu-item>
+                            <el-menu-item index="2-2" v-on:click="ChangePhoto">修改头像</el-menu-item>
+                            <el-menu-item index="2-3" v-on:click="onLogout">注销</el-menu-item>
+                        </el-submenu>
+                    </el-menu>
+                </el-col>
+            </el-row>
   
-          <!-- 教师端系统的header -->
-          <el-row v-else
-                  style="height: 100%; background-color: darkslateblue; width: 100%;">
-            <el-col :span="2" style="min-height: 100%">
-            </el-col>
-            <el-col :span="5" style="min-height: 100%">
-              <el-col :span="3" style="min-height: 100%; min-width: 60px">
-                <img style="height: 56px;margin-right: 8%" src="./assets/logo.png" alt="logo">
-              </el-col>
-              <el-col :span="18" style="min-height: 100%">
-                <div style="color: gold; margin-top: 17px; font-size: 15px;">
-                    雄安交通职业技术学院教务系统
-                </div>
-              </el-col>
-            </el-col>
-            <el-col :span="4" style="min-height: 100%">
-              <div style="color: white; margin-top: 17px">
-                
-              </div>
-            </el-col>
-            <el-col :span="9" style="min-height: 100%">
-            </el-col>
-            <el-col :span="2" style="min-height: 100%">
-              <el-menu v-if="getLoginState" style="background-color: transparent" mode="horizontal">
-                <el-submenu index="1" style="float: left;">
-                  <template v-slot:title>
-                    <el-avatar :src="getPhotoUrl"></el-avatar>
-                    {{getUsername}}
-                  </template>
-                  <el-menu-item index="3-1" v-on:click="ChangePhoto">修改头像</el-menu-item>
-                  <el-menu-item index="3-3" v-on:click="onLogout">注销</el-menu-item>
-                </el-submenu>
-              </el-menu>
-            </el-col>
-          </el-row>
+            <!-- 系统端系统的header -->
+            <el-row v-if="isSystem" style="height: 100%; background-color: darkslateblue; width: 100%;">
+                <el-col :span="2" style="min-height: 100%"></el-col>
+                <el-col :span="5" style="min-height: 100%">
+                    <el-col :span="3" style="min-height: 100%; min-width: 60px">
+                        <img style="height: 56px;margin-right: 8%" src="./assets/logo.png" alt="logo">
+                    </el-col>
+                    <el-col :span="18" style="min-height: 100%">
+                        <div style="color: gold; margin-top: 17px; font-size: 15px;">
+                            雄安交通职业技术学院教务系统
+                        </div>
+                    </el-col>
+                </el-col>
+                <el-col :span="4" style="min-height: 100%">
+                    <div style="color: white; margin-top: 17px; margin-left:20px">
+                        系统管理端
+                    </div>
+                </el-col>
+                <el-col :span="9" style="min-height: 100%">
+                </el-col>
+                <el-col :span="2" style="min-height: 100%">
+                    <el-menu v-if="getLoginState" style="background-color: transparent" mode="horizontal">
+                        <el-submenu index="1" style="float: left;">
+                            <template v-slot:title>
+                                <el-avatar :src="getPhotoUrl"></el-avatar>
+                                {{getUsername}}
+                            </template>
+                            <el-menu-item index="2-1" v-on:click="toHome">主页</el-menu-item>
+                            <el-menu-item index="2-2" v-on:click="ChangePhoto">修改头像</el-menu-item>
+                            <el-menu-item index="2-3" v-on:click="onLogout">注销</el-menu-item>
+                        </el-submenu>
+                    </el-menu>
+                </el-col>
+            </el-row>
         </el-header>
   
-          <el-main v-if="getLoginState" class="main">
+        <!-- 学生教师端的侧边栏 -->
+        <el-main v-if="getLoginState && !isSystem" class="main">
             <el-col :span="4">
-              <el-row class="tac">
-                <el-menu
-                    v-if="this.$route.path !== '/' && this.$route.path !== '/register'"
-                    router
-                    :default-active="this.$route.path"
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose"
-                >
-                  <el-submenu index="1">
-                    <template v-slot:title>
-                      <i class="el-icon-location"></i>
-                      <span>选课系统</span>
-                    </template>
-                    <el-menu-item v-if="!isTeacher" class="submenu" index="/course_select/schedule">
-                      <template v-slot:title>
-                        <i class="el-icon-zoom-in"></i>
-                        <span>课程表</span>
-                      </template>
-                    </el-menu-item>
-                    <el-menu-item v-if="!isTeacher" class="submenu" index="/course_select/select">
-                      <template v-slot:title>
-                        <i class="el-icon-zoom-in"></i>
-                        <span>选课</span>
-                      </template>
-                    </el-menu-item>
-                  </el-submenu>
-                  <el-menu-item v-if="!isTeacher" class="submenu" index="/courseplatform">
-                    <template v-slot:title>
-                      <i class="el-icon-document"></i>
-                      <span>课程平台</span>
-                    </template>
-                  </el-menu-item>
-                  <el-menu-item v-if="!isTeacher" class="submenu" index="/evaluation">
-                    <template v-slot:title>
-                      <i class="el-icon-edit"></i>
-                      <span>评教系统</span>
-                    </template>
-                  </el-menu-item>
-                  <el-menu-item v-if="!isTeacher" class="submenu" index="/schedule">
-                    <template v-slot:title>
-                      <i class="el-icon-loading"></i>
-                      <span>学科进度</span>
-                    </template>
-                  </el-menu-item>
-                  <el-menu-item v-if="!isTeacher" class="submenu" index="/userInfo">
-                    <template v-slot:title>
-                      <i class="el-icon-info"></i>
-                      <span>个人信息</span>
-                    </template>
-                  </el-menu-item>
-                </el-menu>
-              </el-row>
+                <el-row class="tac">
+                    <el-menu router :default-active="this.$route.path" >
+
+                        <el-submenu index="3">
+                            <template v-slot:title>
+                                <i class="el-icon-location"></i>
+                                <span>选课系统</span>
+                            </template>
+                            <el-menu-item v-if="isStudent" class="submenu" index="/course_select/schedule">
+                                <template v-slot:title>
+                                    <i class="el-icon-zoom-in"></i>
+                                    <span>课程表</span>
+                                </template>
+                            </el-menu-item>
+                            <el-menu-item v-if="isStudent" class="submenu" index="/course_select/select">
+                                <template v-slot:title>
+                                    <i class="el-icon-zoom-in"></i>
+                                    <span>选课</span>
+                                </template>
+                            </el-menu-item>
+                        </el-submenu>
+                        <el-menu-item v-if="isStudent" class="submenu" index="/courseplatform">
+                            <template v-slot:title>
+                                <i class="el-icon-document"></i>
+                                <span>课程平台</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item v-if="isStudent" class="submenu" index="/evaluation">
+                            <template v-slot:title>
+                                <i class="el-icon-edit"></i>
+                                <span>评教系统</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item v-if="isStudent" class="submenu" index="/schedule">
+                            <template v-slot:title>
+                                <i class="el-icon-pie-chart"></i>
+                                <span>成绩查看</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item v-if="isStudent" class="submenu" index="/userInfo">
+                            <template v-slot:title>
+                                <i class="el-icon-info"></i>
+                                <span>个人信息</span>
+                            </template>
+                        </el-menu-item>
+                    </el-menu>
+                </el-row>
             </el-col>
             <el-col v-if="getLoginState" :span="20">
-              <router-view></router-view>
+                <router-view></router-view>
             </el-col>
-          </el-main>
-          <el-main v-if="!getLoginState" class="main">
+        </el-main>
+        <el-main v-if="!getLoginState" class="main">
             <router-view></router-view>
-          </el-main>
+        </el-main>
   
         <el-footer class="footer">
-          <el-backtop></el-backtop>
-          <div style="text-align: center;color:#5a5959;margin-top: 35px">版权所有© 北京交通大学软件学院</div>
+            <el-backtop></el-backtop>
+            <div style="text-align: center;color:#5a5959;margin-top: 35px">版权所有© 北京交通大学软件学院</div>
         </el-footer>
       </el-container>
     </div>
-  </template>
+</template>
   
   
-  <script>
-  import ChangePhoto from "@/components/ChangePhoto";
+<script>
+  import ChangePhoto from "@/components/user/ChangePhoto";
   import Vue from "vue";
   
   export default {
@@ -207,8 +193,11 @@
       isTeacher: function(){
         return sessionStorage.getItem("role") === "teacher";
       },
-      isSysLoginPath: function(){
-        return this.$route.path === "/sysLogin";
+      isStudent: function(){
+        return sessionStorage.getItem("role") === "student";
+      },
+      isSystem: function(){
+        return (sessionStorage.getItem("role") === "system" || this.$route.path === "/sysLogin");
       }
     },
   
@@ -240,10 +229,6 @@
                 } else {
                     //如果没有登录就返回登录界面
                     this.$router.push("/");
-                    // this.$message({
-                    //         message: '警告，请登录账户',
-                    //         type: 'warning'
-                    // });
                 }
             }
             else {
@@ -288,26 +273,30 @@
                     });
                     _this.$router.push({name:"Login",params:{isReload: 'true',msg: '登出成功！'}});
                 }
+                else if(response.data.code === "1002"){
+                     //删除vuex中存储的用户信息
+                     _this.$store.dispatch('setUser', null)
+                    //删除session中存储的信息
+                    sessionStorage.clear()
+                    //删除cookie中存储的信息
+                    const cookies = Vue.$cookies.keys();
+                    for (let i = 0; i < cookies.length; i++) {
+                        Vue.$cookies.remove(cookies[i])
+                    }
+
+                    _this.$message({
+                        message: response.data.msg + '！请重新登录！',
+                        type: 'warning',
+                        duration: 2000
+                    });
+                    _this.$router.go(0)
+                    _this.$router.push({name:"Login",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
+                }
             }).catch(function (response) {
                 // 这里是处理错误的回调
                 console.log(response)
             })
         },
-
-        // toRegister: function () {
-        //     let flag = false;
-        //     this.$store.commit('login', flag);
-        //     // localStorage.clear();
-        //     const cookies = Vue.$cookies.keys();
-        //     for (let i = 0; i < cookies.length; i++) {
-        //         Vue.$cookies.remove(cookies[i])
-        //     }
-  
-        //     console.log(this.$route.path);
-        //     if (this.$route.path !== "/register") {
-        //         this.$router.push({name:"Register",params:{isReload: 'true'}});
-        //     }
-        // },
 
         toHome: function () {
             if (this.$route.path !== "/home") {
@@ -321,14 +310,6 @@
 
         closeChangePhoto: function(){
             this.photoFlag = false;
-        },
-      
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-        },
-
-        handleClose(key, keyPath) {
-            console.log(key, keyPath);
         },
     }
 }
