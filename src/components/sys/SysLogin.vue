@@ -81,7 +81,7 @@
             //将用户名放入vuex中
             _this.$store.dispatch("setUser", JSON.stringify(response.data.data));
             _this.$store.dispatch("setToken", response.data.data.userToken);
-            _this.$router.push({name: 'SysHome', params: {isReload: 'true'}});
+            _this.$router.push({name: 'SysStudent', params: {isReload: 'true'}});
           }else{
             _this.$message.error('账号或密码错误');
           }
