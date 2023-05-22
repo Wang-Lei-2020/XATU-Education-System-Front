@@ -41,8 +41,8 @@
           <el-form-item label="入学年份" prop="enrollmentTime">
             <el-date-picker
               v-model="searchData.enrollmentTime"
-              type="month"
-              placeholder="选择月">
+              type="year"
+              placeholder="选择年">
             </el-date-picker>
             <!-- <el-input   v-model="addData.enrollmentTime"></el-input> -->
           </el-form-item>
@@ -367,8 +367,8 @@
               <el-form-item label="入学年份" prop="enrollmentTime">
                 <el-date-picker
                   v-model="addData.enrollmentTime"
-                  type="month"
-                  placeholder="选择月">
+                  type="year"
+                  placeholder="选择年">
                 </el-date-picker>
                 <!-- <el-input   v-model="addData.enrollmentTime"></el-input> -->
               </el-form-item>
