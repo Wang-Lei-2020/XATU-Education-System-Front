@@ -336,7 +336,7 @@
                         type: 'warning',
                         duration: 2000
                     });
-                    _this.$router.go(0)
+                    // _this.$router.go(0)
                     _this.$router.push({name:"Login",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
                 }
             }).catch(function (response) {

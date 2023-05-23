@@ -19,21 +19,3 @@ const store = new Vuex.Store({
     actions
 })
 export default store;
-
-
-
-// export default new Vuex.Store({
-//     state: {
-//         //是否登录判断
-//         islogin: ''
-//     },
-//     mutations: {
-//         login: (state, n) => {
-//             //传入登录状态islogin
-//             let islogin = JSON.parse(n);
-//             localStorage.setItem('islogin', JSON.stringify(islogin));
-//             console.log("store:" + islogin);
-//             state.islogin = islogin;
-//         }
-//     }
-// });
