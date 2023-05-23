@@ -50,7 +50,8 @@
                             </template>
                             <el-menu-item index="2-1" v-on:click="toHome">主页</el-menu-item>
                             <el-menu-item index="2-2" v-on:click="ChangePhoto">修改头像</el-menu-item>
-                            <el-menu-item index="2-3" v-on:click="onLogout">注销</el-menu-item>
+                            <el-menu-item index="2-3" v-on:click="ChangePasssword">修改密码</el-menu-item>
+                            <el-menu-item index="2-4" v-on:click="onLogout">注销</el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-col>
@@ -268,7 +269,7 @@
                 if (this.$store.state.isLogin) {
                     this.$notify({
                         title: '系统提示',
-                        message: '欢迎用户：' + this.$store.state.number + this.$store.state.name,
+                        message: '欢迎用户：' + this.$store.state.number + " " + this.$store.state.name,
                         position: 'bottom-right',
                         type: 'success', //提醒类型
                         duration: 2000  //持续时间
@@ -417,6 +418,12 @@
         closeChangePhoto: function(){
             this.photoFlag = false;
         },
+
+        ChangePasssword: function(){
+            if (this.$route.path !== "/changePassword") {
+                this.$router.push({name:"ChangePassword",params:{isReload: 'true'}});
+            }
+        }
     }
 }
   </script>

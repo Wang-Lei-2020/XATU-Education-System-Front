@@ -14,6 +14,7 @@ import CourseSchedule from '@/components/CourseSchedule';
 import CourseSelect from '@/components/CourseSelect';
 import SysHome from "@/components/sys/SysHome";
 import SysStudent from "@/components/sys/SysStudent";
+import ChangePassword from "@/components/user/ChangePassword";
 
 
 
@@ -90,6 +91,11 @@ const routes = [
             name: 'HomeworkList',
             component: HomeworkList
         }]
+    },
+    {
+        path: '/changePassword',
+        name: 'ChangePassword',
+        component: ChangePassword
     }
 
 ];
