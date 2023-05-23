@@ -43,7 +43,7 @@
         loginForm: {
           number: '',
           password: '',
-          role: ''
+          role: 'student'
         },
         rules: { //prop的名字必须和rules中的名字一样！！！
           number: [
