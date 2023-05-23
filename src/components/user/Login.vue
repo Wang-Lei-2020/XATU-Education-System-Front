@@ -43,11 +43,11 @@
         loginForm: {
           number: '',
           password: '',
-        //   role: 'student'
+          role: 'student'
         },
         rules: { //prop的名字必须和rules中的名字一样！！！
           number: [
-            { required: true, message: '请输入学号/工号', trigger: 'blur' }
+            { required: true, message: '请输入学号/工号' }
           ],
           password: [
             { required: true, message: '请输入密码'}
@@ -70,9 +70,9 @@
         this.$router.push({name: 'Home', params: {isReload: 'true'}});
       }
   
-    //   if (this.$route.params.isReload === 'true') {
-    //     this.$router.go(0);
-    //   }
+      if (this.$route.params.isReload === 'true') {
+        this.$router.go(0);
+      }
     },
     methods: {
       onLogin: function () {

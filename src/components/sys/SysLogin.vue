@@ -41,7 +41,7 @@
         },
         rules: { //prop的名字必须和rules中的名字一样！！！
           number: [
-            { required: true, message: '请输入账号', trigger: 'blur' }
+            { required: true, message: '请输入账号'}
           ],
           password: [
             { required: true, message: '请输入密码'}

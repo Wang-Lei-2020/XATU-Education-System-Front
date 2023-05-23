@@ -498,6 +498,7 @@ import { provinceAndCityData,codeToText } from 'element-china-area-data'; //
 import NationSelect from "@/components/sys/NationSelect";
 // import {genUpToken} from "@/components/user/qiniuToken";
 // import Vue from "vue";
+import Vue from "vue";
 // import { read, utils } from "xlsx";
 export default {
   //民族组件
@@ -667,11 +668,32 @@ export default {
         withCredentials: true
       // }).then(function (response){
       }).then(response =>{
-        // console.log(response.data.data);
-        this.tableDatas = response.data.data;
-        this.total = response.data.total;
+        const _this = this;
+        if (response.data.code === "0000"){
+            // console.log(response.data.data);
+            this.tableDatas = response.data.data;
+            this.total = response.data.total;
+        }
+        // 这里是用户token不正确的回调
+        else if (response.data.code === '1002') {
+            //删除vuex中存储的用户信息
+            _this.$store.dispatch('setUser', null)
+            //删除session中存储的信息
+            sessionStorage.clear()
+            //删除cookie中存储的信息
+            const cookies = Vue.$cookies.keys();
+            for (let i = 0; i < cookies.length; i++) {
+                Vue.$cookies.remove(cookies[i])
+            }
+  
+            _this.$message({
+                message: response.data.msg + '！请重新登录！',
+                type: 'warning',
+                duration: 2000
+            });
+            _this.$router.push({name:"SysLogin",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
+          }
       })
-      // this.searchData = {}
     },
     importStudent(){ //弹出导入对话框
       let self = this;
