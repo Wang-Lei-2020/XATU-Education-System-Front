@@ -15,6 +15,8 @@ import CourseSelect from '@/components/CourseSelect';
 import SysHome from "@/components/sys/SysHome";
 import SysStudent from "@/components/sys/SysStudent";
 import ChangePassword from "@/components/user/ChangePassword";
+import CourseList from "@/components/homework/CourseList.vue";
+import HomeworkPage from "@/components/homework/HomeworkPage.vue";
 
 
 
@@ -91,6 +93,16 @@ const routes = [
             name: 'HomeworkList',
             component: HomeworkList
         }]
+    },
+    {
+        path: '/courselist',
+        name: 'CourseList',
+        component: CourseList,
+    },
+    {
+        path: '/homeworkpage',
+        name: 'HomeworkPage',
+        component: HomeworkPage
     },
     {
         path: '/changePassword',

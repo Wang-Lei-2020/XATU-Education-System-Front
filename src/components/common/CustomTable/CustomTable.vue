@@ -1,12 +1,13 @@
 <template>
     <div>
-        <div class="form">
+        <div>
             <Form
                     v-if="isFormShow && formData.length"
                     :formWidth="formWidth"
                     :formData="formData"
                     :buttons="formButtons"
                     :inline=true
+                    class="form"
             >
                 <template v-slot:upload>
                     <el-upload

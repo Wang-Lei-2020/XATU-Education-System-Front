@@ -40,7 +40,7 @@
             <el-row>
               <el-descriptions class="margin-top" :column="1" border>
                 <el-descriptions-item label="用户名" labelClassName="label">
-                  kooriookami
+                    邸晓飞
                 </el-descriptions-item>
                 <el-descriptions-item label="所属院系" labelClassName="label">
                   软件学院

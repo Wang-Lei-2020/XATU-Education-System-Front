@@ -1,41 +1,26 @@
 <template>
     <div class="page">
         <el-row>
-          <span class="title"><i class="el-icon-d-arrow-right"></i>课程列表</span>
-            <div class="titlebox board-blue"/>
+            <span class="title"><i class="el-icon-arrow-right"></i>课程列表</span>
+            <div class="titlebox board-blue"></div>
         </el-row>
         <el-row>
             <Table
-                :isFormShow="false"
-                :columns="Columns"
-                :data="rTableData"
-                :pagination="pagination"
-                @getData="getHomeWorkList"
-                :loading="loading"
-                @changeCurrent="changeCurrent"
-                @rowClick="rowClick"
-                :isPaginationShow="true"
+                    :columns="Columns"
+                    :data="rTableData"
+                    :pagination="pagination"
+                    @getData="getHomeWorkList"
+                    :loading="loading"
+                    @rowClick="rowClick"
+                    :isPaginationShow="true"
 
-                :formData="formData"
-                :formButtons="formButtons"
+                    :formData="formData"
+                    :formButtons="formButtons"
             >
-                <template v-slot:tag="scope">
-                    <el-tag type="success">
-                        {{scope.rows.status}}
-                    </el-tag>
-                </template>
-                <template v-slot:action="scope">
-                    <el-button
-                        size="small"
-                        @click="homeworkSubmit(scope)"
-                        class="qgreen"
-                    >提交
-                    </el-button>
-                </template>
-
+                <!--    </el-table-column>-->
             </Table>
+            <el-button size="mini" class="back" @click="showCourseCard">返回</el-button>
         </el-row>
-
     </div>
 </template>
 
@@ -43,7 +28,7 @@
 import Table from "@/components/common/CustomTable/CustomTable.vue";
 
 export default {
-    name: "HomeworkList",
+    name: "CourseList",
     components: {Table},
     data() {
         return {
@@ -54,20 +39,17 @@ export default {
                 total: 0, //数据总个数
             },
             Columns: [
-                {prop: "title", label: "作业标题", sortable: true},
-                {prop: "teacher", label: "发布人",},
-                {prop: "deadline", label: "提交截止时间"},
-                {slot:"action",  label: "提交作业"},
-                {slot:"tag", prop: "status", label: "状态"},
-                {prop: "score", label: "我的得分"},
+                {prop: "number", label: "课程号", sortable: true},
+                {prop: "name", label: "课程名称",},
+                {prop: "school", label: "开课院系"},
+                {prop: "teacher", label: "主讲教师"},
             ],
             rTableData: [
                 {
-                    title: "小作业",
-                    teacher: "邸晓飞",
-                    deadline: "2023-05-31 00:00",
-                    status: "进行",
-                    score:"--"
+                    number: "M510007B",
+                    name: "软件工程经济学",
+                    school: "软件学院",
+                    teacher: "邸晓飞"
                 }
             ],
             formData: [
@@ -97,15 +79,12 @@ export default {
         getHomeWorkList() {
 
         },
-        changeCurrent(val) {
-            console.log(val);
-        },
         rowClick(val) {
             console.log(val);
+            this.$router.push({name: 'HomePage'});
         },
-        homeworkSubmit(val){
-            console.log(val);
-            this.$router.push({name: 'HomeworkPage'});
+        showCourseCard() {
+            this.$router.push({name: 'CoursePlatform'});
         }
     },
     computed: {},
