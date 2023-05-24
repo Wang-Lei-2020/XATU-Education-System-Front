@@ -17,10 +17,11 @@
                         </el-menu-item
                         >
                         <el-menu-item index="/coursepage/info">基本信息</el-menu-item>
-                        <el-menu-item index="/coursepage/homeworklist">课程作业</el-menu-item>
+                        <el-menu-item v-if="isTeacher" index="/coursepage/thomeworklist">课程作业</el-menu-item>
+                        <el-menu-item v-else index="/coursepage/homeworklist">课程作业</el-menu-item>
                     </el-menu>
                     <div class="backicon">
-                        <img src="@/assets/images/back.png" style="cursor: pointer;" height="30" width="30" @click="back">
+                        <img src="../../assets/images/back.png" style="cursor: pointer;" height="30" width="30" @click="back">
                     </div>
                     <div class="courseName"><span>软件工程经济学</span></div>
                 </el-row>
@@ -37,11 +38,21 @@ export default {
     name: "CoursePage",
     data() {
         return {
+            role:"",
+            userId:"",
+            isTeacher:false,
             paths: this.$router.currentRoute.fullPath,
         };
     },
     created() {
         // console.log(this.$router.currentRoute)
+        //登录角色
+        if(this.$store.state.isLogin){
+            this.userId = this.$store.state.number
+            this.role = sessionStorage.getItem('role')
+            if(this.role === "teacher") this.isTeacher = true;
+        }
+        else this.$message.error('登录会话已过期')
     },
     methods: {
         handleClick(tab, event) {

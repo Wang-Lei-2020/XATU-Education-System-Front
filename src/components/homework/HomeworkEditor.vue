@@ -9,7 +9,8 @@
                     class="editor"
                     @blur="onEditorBlur"
                     @focus="onEditorFocus"
-                    @change="onEditorChange">
+                    @change="onEditorChange"
+            >
                 >
             </quill-editor>
         </div>
@@ -209,10 +210,10 @@ export default {
             // console.log('editor focus!', quill)
         },
         // 内容改变事件
-        onEditorChange({quill, html, text}) {
-            console.log('quill', quill, html, text)
-            console.log('html', html)
-            console.log('text', text)
+        onEditorChange({ html}) {
+            // console.log('quill', quill, html, text)
+            // console.log('html', html)
+            // console.log('text', text)
             this.$emit('eidtContent', html)
         },
         /** 文件预上传格式限制 */
