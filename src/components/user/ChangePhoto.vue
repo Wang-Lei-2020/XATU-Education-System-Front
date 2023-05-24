@@ -15,7 +15,8 @@
       </el-form-item>
   
       <el-form-item>
-        <el-button style="margin-left: 150px" type="primary" @click="changePhoto()">提交</el-button>
+        <el-button v-if="isStudent" style="margin-left: 150px" type="primary" @click="changeStuPhoto()">提交</el-button>
+        <el-button v-if="isTeacher" style="margin-left: 150px" type="primary" @click="changeTeaPhoto()">提交</el-button>
       </el-form-item>
     </el-form>
   </template>
@@ -57,13 +58,66 @@
       token=genUpToken(AK, SK, policy);
       this.postData.token=token;
     },
+    computed: {
+        isStudent: function () {
+            return sessionStorage.getItem('role') === 'student'
+        },
+        isTeacher: function () {
+            return sessionStorage.getItem('role') === 'teacher'
+        }
+    },
     methods: {
-      changePhoto:function(){
+      changeStuPhoto:function(){
         const _this = this
         const formData = new FormData()
         formData.append('id', JSON.parse(sessionStorage.getItem('user')).id);
         formData.append('photoUrl', _this.uploadPicUrl);
         this.$axios.post('/user/stu/changePhoto', formData, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          },
+          withCredentials: true
+        }).then(function (response) {
+          // 这里是处理正确的回调
+          if (response.data.code === '0000') {
+            sessionStorage.setItem("photoUrl", _this.uploadPicUrl);
+            _this.$message({
+              message: '更改头像成功！',
+              type: 'success'
+            });
+            _this.$router.go(0)
+          }
+          // 这里是用户token不正确的回调
+          else if (response.data.code === '1002') {
+            //删除vuex中存储的用户信息
+            _this.$store.dispatch('setUser', null)
+            //删除session中存储的信息
+            sessionStorage.clear()
+            //删除cookie中存储的信息
+            const cookies = Vue.$cookies.keys();
+            for (let i = 0; i < cookies.length; i++) {
+                Vue.$cookies.remove(cookies[i])
+            }
+  
+            _this.$message({
+                message: response.data.msg + '！请重新登录！',
+                type: 'warning',
+                duration: 2000
+            });
+            _this.$router.go(0)
+            _this.$router.push({name:"Login",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
+          }
+        }).catch(function (response) {
+          // 这里是处理错误的回调
+          console.log(response)
+        });
+      },
+      changeTeaPhoto: function () {
+        const _this = this
+        const formData = new FormData()
+        formData.append('id', JSON.parse(sessionStorage.getItem('user')).id);
+        formData.append('photoUrl', _this.uploadPicUrl);
+        this.$axios.post('/user/tea/changePhoto', formData, {
           headers: {
             "Content-Type": "application/json;charset=utf-8"
           },
