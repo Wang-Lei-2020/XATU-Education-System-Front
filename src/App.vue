@@ -98,7 +98,7 @@
                 <el-row class="tac">
                     <el-menu router :default-active="this.$route.path" >
 
-                        <el-submenu index="3">
+                        <el-submenu v-if="isStudent" index="3">
                             <template v-slot:title>
                                 <i class="el-icon-location"></i>
                                 <span>选课系统</span>

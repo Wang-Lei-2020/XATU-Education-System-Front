@@ -27,7 +27,7 @@
         <el-table-column prop="teacher" label="上课教师" width="120"></el-table-column>
         <el-table-column label="时间地点" width="200">
           <template v-slot="scope">
-            <span>{{ scope.row.schedule.time + '/' + scope.row.schedule.location }}</span>
+            <span>{{ parseCourseTime(scope.row.schedule.time) + '/' + scope.row.schedule.location }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -63,12 +63,12 @@
         <el-table-column prop="teacher" label="上课教师" width="120"></el-table-column>
         <el-table-column label="时间地点" width="200">
           <template v-slot="scope">
-            <span>{{ scope.row.schedule.time + '/' + scope.row.schedule.location }}</span>
+            <span>{{ parseCourseTime(scope.row.schedule.time) + '/' + scope.row.schedule.location }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template v-slot="scope">
-            <el-button v-if="scope.row.selected" type="text" size="small" disabled>已选</el-button>
+            <el-button v-if="scope.row.selected === 1" type="text" size="small" disabled>已选</el-button>
             <el-button v-else-if="scope.row.remain === 0" type="text" size="small" disabled>无余量</el-button>
             <el-button @click="handleSelectCourse(scope.row)" type="text" size="small" v-else>选课</el-button>
           </template>
@@ -100,7 +100,7 @@
         <el-table-column prop="teacher" label="上课教师" width="120"></el-table-column>
         <el-table-column label="时间地点" width="200">
           <template v-slot="scope">
-            <span>{{ scope.row.schedule.time + '/' + scope.row.schedule.location }}</span>
+            <span>{{ parseCourseTime(scope.row.schedule.time) + '/' + scope.row.schedule.location }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -128,7 +128,7 @@ export default {
       selectedList: [],
       query: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 20
       }
     }
   },
@@ -147,6 +147,19 @@ export default {
     this.refreshData();
   },
   methods: {
+    parseCourseTime(time) {
+      const [week, index] = time.split(',');
+      const weekMap = {
+        mon: '星期一',
+        tue: '星期二',
+        wedn: '星期三',
+        thur: '星期四',
+        fri: '星期五',
+        sat: '星期六',
+        sun: '星期日'
+      };
+      return `${weekMap[week]},第${index}节`;
+    },
     /** 冲突课程表格，设置分组标题行的class */
     tableRowClassName({ row }) {
       if (row.fullLine === 1) {

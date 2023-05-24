@@ -15,63 +15,49 @@
         <el-table-column prop="mon" label="周一">
           <template v-slot="scope">
             <template v-if="scope.row.mon">
-              <div class="course-num">{{scope.row.mon.courseNum}} [{{scope.row.mon.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.mon.name}} - {{scope.row.mon.teacher}}</div>
-              <div class="course-location">{{scope.row.mon.location}}</div>
+              <schedule-ceil :course="scope.row.mon" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="tue" label="周二">
           <template v-slot="scope">
             <template v-if="scope.row.tue">
-              <div class="course-num">{{scope.row.tue.courseNum}} [{{scope.row.tue.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.tue.name}} - {{scope.row.tue.teacher}}</div>
-              <div class="course-location">{{scope.row.tue.location}}</div>
+              <schedule-ceil :course="scope.row.tue" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="wedn" label="周三">
           <template v-slot="scope">
             <template v-if="scope.row.wedn">
-              <div class="course-num">{{scope.row.wedn.courseNum}} [{{scope.row.wedn.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.wedn.name}} - {{scope.row.wedn.teacher}}</div>
-              <div class="course-location">{{scope.row.wedn.location}}</div>
+              <schedule-ceil :course="scope.row.wedn" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="thur" label="周四">
           <template v-slot="scope">
             <template v-if="scope.row.thur">
-              <div class="course-num">{{scope.row.thur.courseNum}} [{{scope.row.thur.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.thur.name}} - {{scope.row.thur.teacher}}</div>
-              <div class="course-location">{{scope.row.thur.location}}</div>
+              <schedule-ceil :course="scope.row.thur" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="fri" label="周五">
           <template v-slot="scope">
             <template v-if="scope.row.fri">
-              <div class="course-num">{{scope.row.fri.courseNum}} [{{scope.row.fri.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.fri.name}} - {{scope.row.fri.teacher}}</div>
-              <div class="course-location">{{scope.row.fri.location}}</div>
+              <schedule-ceil :course="scope.row.fri" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="sat" label="周六">
           <template v-slot="scope">
             <template v-if="scope.row.sat">
-              <div class="course-num">{{scope.row.sat.courseNum}} [{{scope.row.sat.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.sat.name}} - {{scope.row.sat.teacher}}</div>
-              <div class="course-location">{{scope.row.sat.location}}</div>
+              <schedule-ceil :course="scope.row.sat" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="sun" label="周日">
           <template v-slot="scope">
             <template v-if="scope.row.sun">
-              <div class="course-num">{{scope.row.sun.courseNum}} [{{scope.row.sun.courseIndex}}]</div>
-              <div class="course-name">{{scope.row.sun.name}} - {{scope.row.sun.teacher}}</div>
-              <div class="course-location">{{scope.row.sun.location}}</div>
+              <schedule-ceil :course="scope.row.sun" />
             </template>
           </template>
         </el-table-column>
@@ -83,10 +69,13 @@
 <script>
 import Vue from "vue";
 import print from "print-js";
+import ScheduleCeil from './ScheduleCeil.vue'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "CourseSchedule",
-  components: {},
+  components: {
+    ScheduleCeil
+  },
   data() {
     return {
       scheduleTable: [],
