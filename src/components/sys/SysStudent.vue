@@ -113,14 +113,14 @@
       :data="tableDatas"
       @selection-change="handleSelectionChange"
       border
-      style="width: 100%;font-size: 18px">
+      style="width: 100%;font-size: 16px">
       <el-table-column
         type="selection"
         fixed="left"
         align="center"
         prop="id"
         label="序号"
-        width="100">
+        width="50">
       </el-table-column>
       <el-table-column
         align="center"
@@ -304,6 +304,24 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>
+            <el-col :span="8" :offset="1">
+            <el-form-item label="上传图片" prop="photoUrl">
+              <el-upload
+                  class="avatar-uploader"
+                  :multiple="false"
+                  :action="actionPath"
+                  accept="image/jpeg,image/gif,image/png,image/bmp"
+                  :before-upload="beforeAvatarUpload"
+                  :data="postData"
+                  v-model="updateData.photoUrl"
+                  :on-success="uploadUpdateSuccess">
+                <img v-if="updateData.photoUrl" :src="updateData.photoUrl" class="avatar">
+                <i v-if="!updateData.photoUrl" class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>               
+            </el-col>            
+          </el-row>
         </el-form>
       </div>
          <!-- 底部按钮 slot="footer" -->
@@ -399,7 +417,7 @@
             </el-col>  
             <el-col :span="10" :offset="0">
               <el-form-item label="民族" prop="nation" >
-                <nation-select :nationValue="form.nation" @onChange="nationChange"></nation-select>
+                <nation-select :nationValue="addData.nation" @onChange="nationChange"></nation-select>
                 <!-- <el-input   v-model="addData.nation"></el-input> -->
               </el-form-item>
             </el-col>                      
@@ -417,9 +435,9 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row>
+          <el-row>
              <el-col :span="8" :offset="1">
-              <el-form-item label="上传图片" :rules="pictureRules" prop="picture">
+              <el-form-item label="上传图片" prop="photoUrl">
                 <el-upload
                     class="avatar-uploader"
                     :multiple="false"
@@ -427,13 +445,14 @@
                     accept="image/jpeg,image/gif,image/png,image/bmp"
                     :before-upload="beforeAvatarUpload"
                     :data="postData"
+                    v-model="photoUrl"
                     :on-success="uploadSuccess">
-                  <img v-if="uploadPicUrl" :src="uploadPicUrl" class="avatar">
-                  <i v-if="!uploadPicUrl" class="el-icon-plus avatar-uploader-icon"></i>
+                  <img v-if="photoUrl" :src="photoUrl" class="avatar">
+                  <i v-if="!photoUrl" class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>               
              </el-col>
-          </el-row> -->
+          </el-row>
         </el-form>
       </div>
          <!-- 底部按钮 slot="footer" -->
@@ -474,9 +493,8 @@
             :on-error="handleError"
             :file-list="fileList"
           >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击选择Excel文件</em></div>
-          <!-- <div slot="tip" class="el-upload-list__item-name">{{fileName}}</div> -->
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击选择Excel文件</em></div>
           </el-upload>
         </el-form-item>
         <el-form-item>
@@ -496,10 +514,9 @@
 <script>
 import { provinceAndCityData,codeToText } from 'element-china-area-data'; //
 import NationSelect from "@/components/sys/NationSelect";
-// import {genUpToken} from "@/components/user/qiniuToken";
+import {genUpToken} from "@/components/user/qiniuToken";
 // import Vue from "vue";
 import Vue from "vue";
-// import { read, utils } from "xlsx";
 export default {
   //民族组件
   components: { NationSelect },
@@ -514,8 +531,7 @@ export default {
       ImportTitle:'导入Excel', //"导入"对话框的标题
       limitNum: 1,//导入文件的个数
       form: {    //"导入"表单绑定file，并初始化
-          file: '',
-          nation: ''
+          file: ''
       },
       fileList: [],//"导入"文件列表
 
@@ -540,18 +556,13 @@ export default {
         size : this.size,
       },
 
-      // //上传证件照
-      // pictureRules: {
-      //   picture: [
-      //     { required: true, message: '请上传头像图片', trigger: 'blur' }
-      //   ]
-      // },
-      // actionPath:'https://upload-z1.qiniup.com',
-      // postData:{
-      //   token:"",
-      // },
-      // qiniuaddr: "http://cdn.wanglei99.xyz",
-      // uploadPicUrl:"",
+      //上传证件照
+      actionPath:'https://upload-z1.qiniup.com',
+      postData:{
+        token:"",
+      },
+      qiniuaddr: "http://cdn.wanglei99.xyz",
+      photoUrl:"",
 
       updateData:{}, //"修改"对话框中表单数据的初始化
       dialogVisible:false, //"修改"对话框是否可见
@@ -570,6 +581,9 @@ export default {
         sex:[{ required:true,message:'性别不能为空',trigger:'blur'}],
         nation:[{ required:true,message:'民族不能为空',trigger:'blur'}],
         household:[{ required:true,message:'籍贯不能为空',trigger:'blur'}],
+        photoUrl: [
+          { required: true, message: '请上传头像图片', trigger: 'blur' }
+        ]
       }
     };
   },
@@ -620,17 +634,17 @@ export default {
     },
     householdChange(val) {
       // this.addData.household = val
-      this.addData.household = codeToText[val[0]]+codeToText[val[1]]
+      this.addData.household = codeToText[val[0]]+codeToText[val[1]];
     },
     nationChange(val) {
-      this.addData.nation = val
+      this.addData.nation = val;
     },
     householdSearchChange(val) {
       // this.addData.household = val
-      this.searchData.household = codeToText[val[0]]+codeToText[val[1]]
+      this.searchData.household = codeToText[val[0]]+codeToText[val[1]];
     },
     nationSearchChange(val) {
-      this.searchData.nation = val
+      this.searchData.nation = val;
     },
     // 第n页信息
     findPage(now_page) { 
@@ -677,13 +691,13 @@ export default {
         // 这里是用户token不正确的回调
         else if (response.data.code === '1002') {
             //删除vuex中存储的用户信息
-            _this.$store.dispatch('setUser', null)
+            _this.$store.dispatch('setUser', null);
             //删除session中存储的信息
-            sessionStorage.clear()
+            sessionStorage.clear();
             //删除cookie中存储的信息
             const cookies = Vue.$cookies.keys();
             for (let i = 0; i < cookies.length; i++) {
-                Vue.$cookies.remove(cookies[i])
+                Vue.$cookies.remove(cookies[i]);
             }
   
             _this.$message({
@@ -708,16 +722,16 @@ export default {
     },
     // 文件状态改变时的钩子
     fileChange(file, fileList) {
-      console.log('change')
-      console.log(file)
-      this.form.file = file.raw
-      console.log(this.form.file)
-      console.log(fileList)
+      console.log('change');
+      console.log(file);
+      this.form.file = file.raw;
+      console.log(this.form.file);
+      console.log(fileList);
     },
     // 上传文件之前的钩子, 参数为上传的文件,若返回 false 或者返回 Promise 且被 reject，则停止上传
     beforeUploadFile(file) {
-      console.log('before upload')
-      console.log(file)
+      console.log('before upload');
+      console.log(file);
       let extension = file.name.substring(file.name.lastIndexOf('.')+1); //获取上传文件的扩展名
       console.log("文件扩展名为:"+extension);
       let size = file.size / 1024 / 1024; //设置上传文件的大小
@@ -779,8 +793,8 @@ export default {
       self.$refs.uploadExcel.submit();
     },
     Update(row){ //点击"修改"按钮弹出修改对话框
-      let self = this
-      console.log("row",row)
+      let self = this;
+      console.log("row",row);
       self.dialogVisible = true;
       self.updateData = row;
       // self.getSchools();
@@ -798,7 +812,6 @@ export default {
           }).then(function (response) {
             console.log("response",response)
             if(response.data.code == "0000"){
-              this.clearSearchData();
               self.$message({
                 type:"success",
                 message:"操作成功",
@@ -806,7 +819,6 @@ export default {
                 center:true,
               })
             }else{
-              this.clearSearchData();
               self.$message({
                 type:"error",
                 message:response.data.msg,
@@ -816,19 +828,22 @@ export default {
             }
             self.dialogVisible = false;
           });
+          this.clearSearchData();
         }
       })
     },
     add(){ //点击"修改"按钮弹出修改对话框
-      let self = this
-      self.addDialogVisible = true;
+      this.addDialogVisible = true;
       // self.getSchools();
-      self.addData = {};
-      self.selectedOptions=[];
-      self.form.nation = ''
+      this.addData = {};
+      this.selectedOptions=[];
+      // this.form.nation = '';
+      this.photoUrl = '';
+      console.log("addData",this.addData);
     },
     addStudent(){ //修改对话框上的"确定"按钮
-      console.log("addData",this.addData)
+      this.addData.photoUrl = this.photoUrl;
+      console.log("addData",this.addData);
       this.$refs["addData"].validate(valid =>{
         if(valid){
           let self = this;
@@ -916,94 +931,81 @@ export default {
       let self = this;
       self.multipleSelection = rows;
     },
-    // changePhoto:function(){
-    //   const _this = this
-    //   const formData = new FormData()
-    //   formData.append('id', JSON.parse(sessionStorage.getItem('user')).id);
-    //   formData.append('photoUrl', _this.uploadPicUrl);
-    //   this.$axios.post('/user/stu/changePhoto', formData, {
-    //     headers: {
-    //       "Content-Type": "application/json;charset=utf-8"
-    //     },
-    //     withCredentials: true
-    //   }).then(function (response) {
-    //     // 这里是处理正确的回调
-    //     if (response.data.code === '0000') {
-    //       sessionStorage.setItem("photoUrl", _this.uploadPicUrl);
-    //       _this.$message({
-    //         message: '更改头像成功！',
-    //         type: 'success'
-    //       });
-    //       _this.$router.go(0)
-    //     }
-    //     // 这里是用户token不正确的回调
-    //     else if (response.data.code === '1002') {
-    //       //删除vuex中存储的用户信息
-    //       _this.$store.dispatch('setUser', null)
-    //       //删除session中存储的信息
-    //       sessionStorage.clear()
-    //       //删除cookie中存储的信息
-    //       const cookies = Vue.$cookies.keys();
-    //       for (let i = 0; i < cookies.length; i++) {
-    //           Vue.$cookies.remove(cookies[i])
-    //       }
+    uploadUpdateSuccess(response, file, fileList) {
+      console.log(fileList);
+      this.updateData.photoUrl = `${this.qiniuaddr}/${response.key}`;
+      console.log(this.updateData.photoUrl);
+      //在这里你就可以获取到上传到七牛的外链URL了
+    },
+    uploadSuccess(response, file, fileList) {
+      console.log(fileList);
+      this.photoUrl = `${this.qiniuaddr}/${response.key}`;
+      console.log(this.photoUrl);
+      //在这里你就可以获取到上传到七牛的外链URL了
+    },
+    beforeAvatarUpload(file) {
+      const isPNG = file.type === "image/png";
+      const isJPEG = file.type === "image/jpeg";
+      const isJPG = file.type === "image/jpg";
+      //可以上传pdf等文件
+      // let extension = file.name.substring(file.name.lastIndexOf('.')+1)
+      // const isPDF = extension === "pdf";
+      const isLt2M = file.size / 1024 / 1024 < 2;
 
-    //       _this.$message({
-    //           message: response.data.msg + '！请重新登录！',
-    //           type: 'warning',
-    //           duration: 2000
-    //       });
-    //       _this.$router.go(0)
-    //       _this.$router.push({name:"Login",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
-    //     }
-    //   }).catch(function (response) {
-    //     // 这里是处理错误的回调
-    //     console.log(response)
-    //   });
-    // },
-    // uploadSuccess(response, file, fileList) {
-    //   console.log(fileList);
-    //   this.uploadPicUrl = `${this.qiniuaddr}/${response.key}`;
-    //   console.log(this.uploadPicUrl);
-    //   //在这里你就可以获取到上传到七牛的外链URL了
-    // },
-    // beforeAvatarUpload(file) {
-    //   const isPNG = file.type === "image/png";
-    //   const isJPEG = file.type === "image/jpeg";
-    //   const isJPG = file.type === "image/jpg";
-    //   //可以上传pdf等文件
-    //   // let extension = file.name.substring(file.name.lastIndexOf('.')+1)
-    //   // const isPDF = extension === "pdf";
-    //   const isLt2M = file.size / 1024 / 1024 < 2;
-
-    //   if (!isPNG && !isJPEG && !isJPG) {
-    //     this.$message.error("上传头像图片只能是 jpg、png、jpeg 格式!");
-    //     return false;
-    //   }
-    //   if (!isLt2M) {
-    //     this.$message.error('上传头像图片大小不能超过 2MB!');
-    //   }
-    //   return (isJPG|isJPEG|isPNG) && isLt2M;
-    // }
+      if (!isPNG && !isJPEG && !isJPG) {
+        this.$message.error("上传头像图片只能是 jpg、png、jpeg 格式!");
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return (isJPG|isJPEG|isPNG) && isLt2M;
+    }
   },
   created() {
-    // if(!this.$store.state.isLogin) {
-    //   this.$router.push({name: 'SysLogin', params: {isReload: 'true'}});
-    // }
+    if(!this.$store.state.isLogin) {
+      this.$router.push({name: 'SysLogin', params: {isReload: 'true'}});
+    }
 
-    // var token;
-    // var policy = {};
-    // var bucketName = 'wanglei2022';
-    // var AK ='hNl-AywgdWuBco20kCxR6rPMUB-uOV8Hlih7o_gI';
-    // var SK = 'LZOs_CcKGSsPac8krncFZFJU38Hgd6lCipLZli6x';
-    // var deadline = Math.round(new Date().getTime() / 1000) + 3600;
-    // policy.scope = bucketName;
-    // policy.deadline = deadline;
-    // token=genUpToken(AK, SK, policy);
-    // this.postData.token=token;
+    var token;
+    var policy = {};
+    var bucketName = 'wanglei2022';
+    var AK ='hNl-AywgdWuBco20kCxR6rPMUB-uOV8Hlih7o_gI';
+    var SK = 'LZOs_CcKGSsPac8krncFZFJU38Hgd6lCipLZli6x';
+    var deadline = Math.round(new Date().getTime() / 1000) + 3600;
+    policy.scope = bucketName;
+    policy.deadline = deadline;
+    token=genUpToken(AK, SK, policy);
+    this.postData.token=token;
 
     this.showAllUserInfo();
     this.getSchools();
   },
 };
 </script>
+
+<style scoped>
+.avatar-uploader {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
