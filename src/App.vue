@@ -159,7 +159,7 @@
                                 <span>学生信息</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item class="submenu" index="/evaluation">
+                        <el-menu-item class="submenu" index="/sysTeacher">
                             <template v-slot:title>
                                 <i class="el-icon-edit"></i>
                                 <span>教师信息</span>
