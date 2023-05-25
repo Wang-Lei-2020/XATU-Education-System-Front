@@ -128,7 +128,7 @@
                                 <span>评教系统</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item v-if="isStudent" class="submenu" index="/schedule">
+                        <el-menu-item v-if="isStudent" class="submenu" index="/course_score">
                             <template v-slot:title>
                                 <i class="el-icon-pie-chart"></i>
                                 <span>成绩查看</span>

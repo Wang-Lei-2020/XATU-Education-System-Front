@@ -22,6 +22,7 @@ import THomeworkList from "@/components/homework/teacher/THomeworkList.vue";
 import AddHomework from "@/components/homework/teacher/AddHomework.vue";
 import StudentHomeworkList from "@/components/homework/teacher/StudentHomeworkList.vue";
 import TeacherHomeworkPage from "@/components/homework/teacher/TeacherHomeworkPage.vue";
+import CourseScore from '@/components/course_score/CourseScore'
 
 
 Vue.use(VueRouter)
@@ -63,6 +64,11 @@ const routes = [
         path: '/course_select/schedule',
         name: 'CourseSchedule',
         component: CourseSchedule
+    },
+    {
+        path: '/course_score',
+        name: 'courseScore',
+        component: CourseScore
     },
     {
         path: '/sysHome',
