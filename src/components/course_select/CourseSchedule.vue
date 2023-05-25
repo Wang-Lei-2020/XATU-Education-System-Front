@@ -15,49 +15,49 @@
         <el-table-column prop="mon" label="周一">
           <template v-slot="scope">
             <template v-if="scope.row.mon">
-              <schedule-ceil :course="scope.row.mon" />
+              <schedule-ceil :course="scope.row.mon" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="tue" label="周二">
           <template v-slot="scope">
             <template v-if="scope.row.tue">
-              <schedule-ceil :course="scope.row.tue" />
+              <schedule-ceil :course="scope.row.tue" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="wedn" label="周三">
           <template v-slot="scope">
             <template v-if="scope.row.wedn">
-              <schedule-ceil :course="scope.row.wedn" />
+              <schedule-ceil :course="scope.row.wedn" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="thur" label="周四">
           <template v-slot="scope">
             <template v-if="scope.row.thur">
-              <schedule-ceil :course="scope.row.thur" />
+              <schedule-ceil :course="scope.row.thur" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="fri" label="周五">
           <template v-slot="scope">
             <template v-if="scope.row.fri">
-              <schedule-ceil :course="scope.row.fri" />
+              <schedule-ceil :course="scope.row.fri" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="sat" label="周六">
           <template v-slot="scope">
             <template v-if="scope.row.sat">
-              <schedule-ceil :course="scope.row.sat" />
+              <schedule-ceil :course="scope.row.sat" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="sun" label="周日">
           <template v-slot="scope">
             <template v-if="scope.row.sun">
-              <schedule-ceil :course="scope.row.sun" />
+              <schedule-ceil :course="scope.row.sun" :mode="mode" />
             </template>
           </template>
         </el-table-column>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import Vue from "vue";
+
 import print from "print-js";
 import ScheduleCeil from './ScheduleCeil.vue'
 export default {
@@ -79,11 +79,18 @@ export default {
   data() {
     return {
       scheduleTable: [],
+      mode: 0
     }
   },
   computed: {
-    isTeacher: function () {
-      return Vue.$cookies.get('role') === "teacher";
+    isTeacher: function(){
+      return sessionStorage.getItem("role") === "teacher";
+    },
+    isStudent: function(){
+      return sessionStorage.getItem("role") === "student";
+    },
+    isSystem: function(){
+      return (sessionStorage.getItem("role") === "system" || this.$route.path === "/sysLogin");
     }
   },
   created() {
@@ -92,21 +99,40 @@ export default {
     }
   },
   mounted() {
+    if(this.isTeacher) {
+      this.mode = 1;
+    } else if(this.isStudent) {
+      this.mode = 0;
+    } else if(this.isSystem) {
+      this.mode = 2;
+    }
     this.getSchedule();
   },
   methods: {
     /** 获取课程表 */
     getSchedule() {
-      // TODO 冲突课程只会显示一个
-      const studentNumber = this.$store.state.number;
-      this.$axios.get('/course/schedule/get', {
-        params: {
-          studentNumber
-        }
-      }).then(res => {
-        console.log(res.data);
-        this.scheduleTable = res.data.data;
-      })
+      console.log(this.mode);
+      if(this.isStudent) {
+        const studentNumber = this.$store.state.number;
+        this.$axios.get('/course/schedule/get', {
+          params: {
+            studentNumber
+          }
+        }).then(res => {
+          console.log(res.data);
+          this.scheduleTable = res.data.data;
+        })
+      } else if(this.isTeacher) {
+        const teacherNumber = this.$store.state.number;
+        this.$axios.get('/course/schedule/teacher/get', {
+          params: {
+            teacherNumber
+          }
+        }).then(res => {
+          console.log(res.data);
+          this.scheduleTable = res.data.data;
+        })
+      }
     },
     /** 打印课程表 */
     printScheduleToPDF() {

@@ -103,13 +103,13 @@
                                 <i class="el-icon-location"></i>
                                 <span>选课系统</span>
                             </template>
-                            <el-menu-item v-if="isStudent" class="submenu" index="/course_select/schedule">
+                            <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/course_select/schedule">
                                 <template v-slot:title>
                                     <i class="el-icon-zoom-in"></i>
                                     <span>课程表</span>
                                 </template>
                             </el-menu-item>
-                            <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/course_select/select">
+                            <el-menu-item v-if="isStudent" class="submenu" index="/course_select/select">
                                 <template v-slot:title>
                                     <i class="el-icon-zoom-in"></i>
                                     <span>选课</span>
