@@ -3,22 +3,22 @@
     <el-form :model="searchData" ref="searchData" label-width="100px">
       <el-row style="margin-top:40px">
         <el-col :span="6" >
-          <el-form-item label="序号" prop="id" style="font-size: 18px"> 
-            <el-input v-model="searchData.id" ></el-input> 
-          </el-form-item>
-        </el-col> 
-        <el-col :span="6" >
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="searchData.name"></el-input>
+          <el-form-item label="课程编号" prop="number">
+            <el-input v-model="searchData.number"></el-input>
           </el-form-item>
         </el-col>  
         <el-col :span="6">
-          <el-form-item label="学号" prop="number">
-            <el-input v-model="searchData.number"></el-input>
+          <el-form-item label="课程名称" prop="name">
+            <el-input v-model="searchData.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="学院" prop="school">
+          <el-form-item label="课程英文名称" prop="nameEn">
+            <el-input v-model="searchData.nameEn"></el-input>
+          </el-form-item>
+        </el-col>   
+        <el-col :span="6">
+          <el-form-item label="开课学院" prop="school">
             <el-select v-model="searchData.school" placeholder="请选择">
               <el-option
                 v-for="item in schools"
@@ -29,70 +29,85 @@
             </el-select>
             <!-- <el-input   v-model="updateData.school"></el-input> -->
           </el-form-item>
-        </el-col>      
+        </el-col>          
       </el-row>
-      <el-row>   
+      <el-row> 
         <el-col :span="6">
-          <el-form-item label="班级" prop="classNumber">
-            <el-input   v-model="searchData.classNumber"></el-input>
+          <el-form-item label="学分" prop="creditValue">
+            <el-input   v-model="searchData.creditValue"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="入学年份" prop="enrollmentTime">
-            <el-date-picker
-              v-model="searchData.enrollmentTime"
-              type="year"
-              placeholder="选择年">
-            </el-date-picker>
-            <!-- <el-input   v-model="addData.enrollmentTime"></el-input> -->
+          <el-form-item label="学时" prop="creditHourValue">
+            <el-input   v-model="searchData.creditHourValue"></el-input>
           </el-form-item>
         </el-col>     
         <el-col :span="6">
-          <el-form-item label="性别" prop="sex">
-            <el-select v-model="searchData.sex" placeholder="请选择">
+          <el-form-item label="开课年级" prop="gradeValue">
+            <el-select v-model="searchData.gradeValue" placeholder="请选择">
               <el-option
-                v-for="item in sexs"
-                :key="item.value"
-                :label="item.value"
-                :value="item.value">
+                v-for="item in grades"
+                :key="item.desc"
+                :label="item.desc"
+                :value="item.desc">
               </el-option>
-            </el-select>                
+            </el-select>        
           </el-form-item>
-        </el-col> 
+        </el-col>   
         <el-col :span="6">
-          <el-form-item label="出生日期" prop="birth">
-            <el-date-picker
-              v-model="searchData.birth"
-              type="date"
-              placeholder="选择日期">
-            </el-date-picker>
-            <!-- <el-input   v-model="addData.birth"></el-input> -->
+          <el-form-item label="开课时段" prop="periodValue" >
+            <el-select v-model="searchData.periodValue" placeholder="请选择">
+              <el-option
+                v-for="item in periods"
+                :key="item.desc"
+                :label="item.desc"
+                :value="item.desc">
+              </el-option>
+            </el-select>  
           </el-form-item>
-        </el-col>                     
+        </el-col>                             
       </el-row>
-      <el-row>
+      <el-row> 
         <el-col :span="6">
-          <el-form-item label="民族" prop="nation" >
-            <nation-select :nationValue="searchData.nation" @onChange="nationSearchChange"></nation-select>
-            <!-- <el-input   v-model="addData.nation"></el-input> -->
+          <el-form-item label="限选说明" prop="isOnlyMajorValue">
+            <el-select v-model="searchData.isOnlyMajorValue" placeholder="请选择">
+              <el-option
+                v-for="item in isOnlyMajors"
+                :key="item.desc"
+                :label="item.desc"
+                :value="item.desc">
+              </el-option>
+            </el-select> 
           </el-form-item>
-        </el-col>                      
+        </el-col>   
         <el-col :span="6">
-          <el-form-item label="籍贯" prop="household">
-            <el-cascader
-              size="large"
-              :options="options"
-              v-model="selectedOptions"
-              @change="householdSearchChange">
-            </el-cascader>
-            <!-- <el-input   v-model="addData.household"></el-input> -->
+          <el-form-item label="考核方式" prop="assessmentValue">
+            <el-select v-model="searchData.assessmentValue" placeholder="请选择">
+              <el-option
+                v-for="item in assessments"
+                :key="item.desc"
+                :label="item.desc"
+                :value="item.desc">
+              </el-option>
+            </el-select> 
+          </el-form-item>
+        </el-col>         
+        <el-col :span="6">
+          <el-form-item label="课程状态" prop="statusValue">
+            <el-select v-model="searchData.statusValue" placeholder="请选择">
+              <el-option
+                v-for="item in states"
+                :key="item.desc"
+                :label="item.desc"
+                :value="item.desc">
+              </el-option>
+            </el-select>  
           </el-form-item>
         </el-col>
-        <el-col :span="3" :offset="6">
+        <el-col :span="3" :offset="2">
           <el-button type="primary" icon="el-icon-s-fold" @click="clearSearchData" style="font-size: 18px">清空</el-button>
         </el-col>
       </el-row>
-
       <el-row style="margin-bottom:20px">
         <el-col :span="3" :offset="1">
           <el-button type="danger" icon="el-icon-delete"  @click="batchDelete" style="font-size: 18px">批量删除</el-button>
@@ -126,19 +141,25 @@
         align="center"
         prop="id"
         label="序号"
-        width="100">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="name"
-        label="姓名"
-        width="150">
+        width="80">
       </el-table-column>
       <el-table-column
         align="center"
         prop="number"
-        label="学号"
-        width="160">
+        label="课程编号"
+        width="150">
+      </el-table-column>      
+      <el-table-column
+        align="center"
+        prop="name"
+        label="课程名称"
+        width="200">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="nameEn"
+        label="课程英文名称"
+        width="200">
       </el-table-column>
       <el-table-column
         align="center"
@@ -148,38 +169,44 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="classNumber"
-        label="班级"
-        width="200">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="enrollmentTime"
-        label="入学时间"
-        width="160">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="sex"
-        label="性别"
+        prop="credit"
+        label="学分"
         width="100">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="birth"
-        label="出生日期"
-        width="160">
+        prop="creditHour"
+        label="学时"
+        width="100">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="nation"
-        label="民族"
+        prop="gradeValue"
+        label="开课年级"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="periodValue"
+        label="开课时段"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="isOnlyMajorValue"
+        label="限选说明"
+        width="200">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="assessmentValue"
+        label="考核方式"
         width="120">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="household"
-        label="籍贯"
+        prop="statusValue"
+        label="课程状态"
         width="160">
       </el-table-column>
       <el-table-column
@@ -243,19 +270,26 @@
               </el-form-item>
             </el-col> 
             <el-col :span="10" :offset="1">
-                <el-form-item label="姓名" prop="name">
-                  <el-input v-model="updateData.name"></el-input>
-                </el-form-item>
-            </el-col>               
+              <el-form-item label="课程编号" prop="number">
+                <el-input v-model="updateData.number" disabled></el-input>
+              </el-form-item>
+            </el-col>              
           </el-row>  
           <el-row>
             <el-col :span="10" :offset="0">
-              <el-form-item label="学号" prop="number">
-                <el-input v-model="updateData.number" disabled></el-input>
-              </el-form-item>
-            </el-col>
+                <el-form-item label="课程名称" prop="name">
+                  <el-input v-model="updateData.name"></el-input>
+                </el-form-item>
+            </el-col>   
             <el-col :span="10" :offset="1">
-              <el-form-item label="学院" prop="school">
+                <el-form-item label="课程英文名" prop="nameEn">
+                  <el-input v-model="updateData.nameEn"></el-input>
+                </el-form-item>
+            </el-col>                                      
+          </el-row>
+          <el-row>
+            <el-col :span="10" :offset="0">
+              <el-form-item label="开课学院" prop="school">
                 <el-select v-model="updateData.school" placeholder="请选择">
                   <el-option
                     v-for="item in schools"
@@ -264,64 +298,92 @@
                     :value="item.code">
                   </el-option>
                 </el-select>
-                <!-- <el-input   v-model="updateData.school"></el-input> -->
+              </el-form-item>
+            </el-col>  
+            <el-col :span="10" :offset="1">
+              <el-form-item label="开课年级" prop="grade">
+                <el-select v-model="updateData.grade" placeholder="请选择">
+                  <el-option
+                    v-for="item in grades"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>             
+          </el-row>
+          <el-row>         
+            <el-col :span="10" :offset="0">
+              <el-form-item label="学分" prop="credit">
+                <el-input   v-model="updateData.credit"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item label="学时" prop="creditHour">
+                <el-input   v-model="updateData.creditHour"></el-input>
               </el-form-item>
             </el-col>            
           </el-row>
           <el-row>
             <el-col :span="10" :offset="0">
-              <el-form-item label="班级" prop="classNumber">
-                <el-input   v-model="updateData.classNumber"></el-input>
+              <el-form-item label="开课时段" prop="period">
+                <el-select v-model="updateData.period" placeholder="请选择">
+                  <el-option
+                    v-for="item in periods"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="10" :offset="1">
-              <el-form-item label="入学年份" prop="enrollmentTime">
-                <el-input   v-model="updateData.enrollmentTime" disabled></el-input>
+              <el-form-item label="限选说明" prop="isOnlyMajor">
+                <el-select v-model="updateData.isOnlyMajor" placeholder="请选择">
+                  <el-option
+                    v-for="item in isOnlyMajors"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>            
           </el-row>
           <el-row>
             <el-col :span="10" :offset="0">
-              <el-form-item label="性别" prop="sex">
-                <el-input   v-model="updateData.sex" disabled></el-input>
+              <el-form-item label="考核方式" prop="assessment" >
+                <el-select v-model="updateData.assessment" placeholder="请选择">
+                  <el-option
+                    v-for="item in assessments"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="10" :offset="1">
-              <el-form-item label="出生日期" prop="birth">
-                <el-input   v-model="updateData.birth" disabled></el-input>
-              </el-form-item>
-            </el-col>            
-          </el-row>
-          <el-row>
-            <el-col :span="10" :offset="0">
-              <el-form-item label="民族" prop="nation" >
-                <el-input   v-model="updateData.nation" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item label="籍贯" prop="household">
-                <el-input   v-model="updateData.household" disabled></el-input>
+              <el-form-item label="课程状态" prop="status">
+                <el-select v-model="updateData.status" placeholder="请选择">
+                  <el-option
+                    v-for="item in states"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8" :offset="1">
-            <el-form-item label="上传图片" prop="photoUrl">
-              <el-upload
-                  class="avatar-uploader"
-                  :multiple="false"
-                  :action="actionPath"
-                  accept="image/jpeg,image/gif,image/png,image/bmp"
-                  :before-upload="beforeAvatarUpload"
-                  :data="postData"
-                  v-model="updateData.photoUrl"
-                  :on-success="uploadUpdateSuccess">
-                <img v-if="updateData.photoUrl" :src="updateData.photoUrl" class="avatar">
-                <i v-if="!updateData.photoUrl" class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-            </el-form-item>               
-            </el-col>            
-          </el-row>
+            <el-col :span="22" :offset="0">
+              <el-form-item label="课程详情" prop="info" >
+                <el-input   v-model="updateData.info"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>          
         </el-form>
       </div>
          <!-- 底部按钮 slot="footer" -->
@@ -349,20 +411,13 @@
       <div style="margin-right: 20px">
         <el-form :model="addData" :rules="rules" ref="addData" label-width="100px">
           <el-row>
-            <el-col :span="10" :offset="1">
-                <el-form-item label="姓名" prop="name">
-                  <el-input v-model="addData.name"></el-input>
-                </el-form-item>
-            </el-col> 
             <el-col :span="10" :offset="0">
-              <el-form-item label="学号" prop="number">
+              <el-form-item label="课程编号" prop="number">
                 <el-input v-model="addData.number"></el-input>
               </el-form-item>
-            </el-col>                          
-          </el-row>  
-          <el-row>
+            </el-col> 
             <el-col :span="10" :offset="1">
-              <el-form-item label="学院" prop="school">
+              <el-form-item label="开课学院" prop="school">
                 <el-select v-model="addData.school" placeholder="请选择">
                   <el-option
                     v-for="item in schools"
@@ -371,88 +426,92 @@
                     :value="item.code">
                   </el-option>
                 </el-select>
-                <!-- <el-input   v-model="updateData.school"></el-input> -->
               </el-form-item>
-            </el-col>
+            </el-col>                          
+          </el-row>  
+          <el-row>
             <el-col :span="10" :offset="0">
-              <el-form-item label="班级" prop="classNumber">
-                <el-input   v-model="addData.classNumber"></el-input>
-              </el-form-item>
-            </el-col>                        
+                <el-form-item label="课程名称" prop="name">
+                  <el-input v-model="addData.name"></el-input>
+                </el-form-item>
+            </el-col>   
+            <el-col :span="10" :offset="1">
+                <el-form-item label="课程英文名" prop="nameEn">
+                  <el-input v-model="addData.nameEn"></el-input>
+                </el-form-item>
+            </el-col>                                      
           </el-row>
           <el-row>
-            <el-col :span="10" :offset="1">
-              <el-form-item label="入学年份" prop="enrollmentTime">
-                <el-date-picker
-                  v-model="addData.enrollmentTime"
-                  type="year"
-                  placeholder="选择年">
-                </el-date-picker>
-                <!-- <el-input   v-model="addData.enrollmentTime"></el-input> -->
-              </el-form-item>
-            </el-col>     
             <el-col :span="10" :offset="0">
-              <el-form-item label="性别" prop="sex">
-                <el-select v-model="addData.sex" placeholder="请选择">
+              <el-form-item label="开课时段" prop="period">
+                <el-select v-model="addData.period" placeholder="请选择">
                   <el-option
-                    v-for="item in sexs"
-                    :key="item.value"
-                    :label="item.value"
-                    :value="item.value">
+                    v-for="item in periods"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
                   </el-option>
-                </el-select>                
+                </el-select>
               </el-form-item>
-            </el-col>                   
-          </el-row>
-          <el-row>
+            </el-col> 
             <el-col :span="10" :offset="1">
-              <el-form-item label="出生日期" prop="birth">
-                <el-date-picker
-                  v-model="addData.birth"
-                  type="date"
-                  placeholder="选择日期">
-                </el-date-picker>
-                <!-- <el-input   v-model="addData.birth"></el-input> -->
+              <el-form-item label="开课年级" prop="grade">
+                <el-select v-model="addData.grade" placeholder="请选择">
+                  <el-option
+                    v-for="item in grades"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
-            </el-col>  
+            </el-col>             
+          </el-row>
+          <el-row>         
             <el-col :span="10" :offset="0">
-              <el-form-item label="民族" prop="nation" >
-                <nation-select :nationValue="addData.nation" @onChange="nationChange"></nation-select>
-                <!-- <el-input   v-model="addData.nation"></el-input> -->
-              </el-form-item>
-            </el-col>                      
-          </el-row>
-          <el-row>
-            <el-col :span="10" :offset="1">
-              <el-form-item label="籍贯" prop="household">
-                <el-cascader
-                  size="large"
-                  :options="options"
-                  v-model="selectedOptions"
-                  @change="householdChange">
-                </el-cascader>
-                <!-- <el-input   v-model="addData.household"></el-input> -->
+              <el-form-item label="学分" prop="credit">
+                <el-input   v-model="addData.credit"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="10" :offset="1">
+              <el-form-item label="学时" prop="creditHour">
+                <el-input   v-model="addData.creditHour"></el-input>
+              </el-form-item>
+            </el-col>            
           </el-row>
           <el-row>
-             <el-col :span="8" :offset="1">
-              <el-form-item label="上传图片" prop="photoUrl">
-                <el-upload
-                    class="avatar-uploader"
-                    :multiple="false"
-                    :action="actionPath"
-                    accept="image/jpeg,image/gif,image/png,image/bmp"
-                    :before-upload="beforeAvatarUpload"
-                    :data="postData"
-                    v-model="photoUrl"
-                    :on-success="uploadSuccess">
-                  <img v-if="photoUrl" :src="photoUrl" class="avatar">
-                  <i v-if="!photoUrl" class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>               
-             </el-col>
+            <el-col :span="10" :offset="0">
+              <el-form-item label="限选说明" prop="isOnlyMajor">
+                <el-select v-model="addData.isOnlyMajor" placeholder="请选择">
+                  <el-option
+                    v-for="item in isOnlyMajors"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>        
+            <el-col :span="10" :offset="1">
+              <el-form-item label="考核方式" prop="assessment" >
+                <el-select v-model="addData.assessment" placeholder="请选择">
+                  <el-option
+                    v-for="item in assessments"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>                
           </el-row>
+          <el-row>
+            <el-col :span="22" :offset="0">
+              <el-form-item label="课程详情" prop="info" >
+                <el-input   v-model="addData.info"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>    
         </el-form>
       </div>
          <!-- 底部按钮 slot="footer" -->
@@ -482,7 +541,7 @@
           <el-upload class="upload-file"
             drag
             ref="uploadExcel"
-            action="http://localhost:8902/sys/stu/import"
+            action="http://localhost:8902/sys/course/import"
             :with-credentials="true" 
             :limit=limitNum
             :auto-upload="false"
@@ -513,14 +572,9 @@
 
 
 <script>
-import { provinceAndCityData,codeToText } from 'element-china-area-data'; //
-import NationSelect from "@/components/sys/NationSelect";
-import {genUpToken} from "@/components/user/qiniuToken";
 // import Vue from "vue";
 import Vue from "vue";
 export default {
-  //民族组件
-  components: { NationSelect },
   data() {
     return {
       total: 0,
@@ -538,16 +592,28 @@ export default {
 
       sexs:[{value:'男'},{value:'女'}],
 
+      //学院
       schools: [],
       schoolValue: '',
+      //开课年级
+      grades:[],
+      gradeValue: '',
+      //开课时段
+      periods:[],
+      periodValue: '',
+      //限选说明
+      isOnlyMajors:[],
+      isOnlyMajorValue:'',
+      //考核方式
+      assessments:[],
+      assessmentValue:'',
+      //课程状态
+      states:[],
+      statusValue:'',
 
       addDialogVisible:false,
       Title1:"添加学生",
       addData:{},
-
-      //籍贯组件
-      options: provinceAndCityData, // 省市二级联动（不带“全部”选项）
-      selectedOptions: [],
 
       multipleSelection:[], //多选时绑定的数据
 
@@ -557,34 +623,23 @@ export default {
         size : this.size,
       },
 
-      //上传证件照
-      actionPath:'https://upload-z1.qiniup.com',
-      postData:{
-        token:"",
-      },
-      qiniuaddr: "http://cdn.wanglei99.xyz",
-      photoUrl:"",
-
       updateData:{}, //"修改"对话框中表单数据的初始化
       dialogVisible:false, //"修改"对话框是否可见
       Title:"修改学生", //"修改"对话框的标题
       rules:{ //表单验证
-        name:[{ required:true,message:'姓名不能为空',trigger:'blur'}],
-        number:[{required:true,message:'学号不能为空',trigger:'blur'},
-        { pattern:/^[0-9]*$/,message:'学号输入格式错误，应为8位数字',trigger:'blur'},
-        { min:8,max:8,message:'学号输入长度错误，应为8位数字',trigger:'blur'}],
-        school:[{required:true,message:'学院不能为空',trigger:'blue'}],
-        classNumber:[{required:true,message:'班级不能为空',trigger:'blue'},
-        { pattern:/^(本|硕)[0-9]*$/,message:'班级输入格式错误，正确格式为：本2203/硕2203',trigger:'blur'},
-        { min:5,max:5,message:'班级输入长度错误，正确格式为：本2203/硕2203',trigger:'blur'}],
-        enrollmentTime:[{ required:true,message:'入学时间不能为空',trigger:'blur'}],
-        birth:[{ required:true,message:'出生日期不能为空',trigger:'blur'}],
-        sex:[{ required:true,message:'性别不能为空',trigger:'blur'}],
-        nation:[{ required:true,message:'民族不能为空',trigger:'blur'}],
-        household:[{ required:true,message:'籍贯不能为空',trigger:'blur'}],
-        photoUrl: [
-          { required: true, message: '请上传头像图片', trigger: 'blur' }
-        ]
+        name:[{ required:true,message:'课程名称不能为空',trigger:'blur'}],
+        nameEn:[{ required:true,message:'课程英文名称不能为空',trigger:'blur'}],
+        number:[{required:true,message:'课程编号不能为空',trigger:'blur'},
+        { pattern:/^(C)[0-9]*$/,message:'学号输入格式错误，应为5位数字',trigger:'blur'},
+        { min:6,max:6,message:'学号输入长度错误，应为5位数字',trigger:'blur'}],
+        school:[{required:true,message:'开课学院不能为空',trigger:'blue'}],
+        grade:[{required:true,message:'开课年级不能为空',trigger:'blue'}],
+        credit:[{required:true,message:'学分不能为空',trigger:'blue'}],
+        creditHour:[{required:true,message:'学时不能为空',trigger:'blue'}],
+        period:[{ required:true,message:'开课时段不能为空',trigger:'blur'}],
+        isOnlyMajor:[{ required:true,message:'限选说明不能为空',trigger:'blur'}],
+        assessment:[{ required:true,message:'考核方式不能为空',trigger:'blur'}],
+        status:[{ required:true,message:'课程状态不能为空',trigger:'blur'}],
       }
     };
   },
@@ -607,7 +662,7 @@ export default {
     //删除操作
     Delete(row) {
       console.log(row);
-      this.$axios.delete('/sys/stu/delete', {	
+      this.$axios.delete('/sys/course/delete', {	
         params: {	// 请求参数拼接在url上
           id: row.id
         }
@@ -632,20 +687,6 @@ export default {
     closeUpdate(){
       this.dialogVisible = false;
       this.showAllUserInfo();
-    },
-    householdChange(val) {
-      // this.addData.household = val
-      this.addData.household = codeToText[val[0]]+codeToText[val[1]];
-    },
-    nationChange(val) {
-      this.addData.nation = val;
-    },
-    householdSearchChange(val) {
-      // this.addData.household = val
-      this.searchData.household = codeToText[val[0]]+codeToText[val[1]];
-    },
-    nationSearchChange(val) {
-      this.searchData.nation = val;
     },
     // 第n页信息
     findPage(now_page) { 
@@ -676,7 +717,7 @@ export default {
       this.searchData.current = current ? current : this.now;
       this.searchData.size = size ? size : this.size;
       console.log("searchData",this.searchData)
-      this.$axios.post('/sys/stu/getStudentList',this.searchData, {
+      this.$axios.post('/sys/course/getCourseList',this.searchData, {
         headers: {
           "Content-Type": "application/json;charset=utf-8"
         },
@@ -768,8 +809,8 @@ export default {
       });
     },
     //获取所有学院
-    getSchools(){
-      this.$axios.get('/sys/stu/getSchools', {
+    getSelections(){
+      this.$axios.get('/sys/course/getSelections', {
       // params:{            
       // },
       headers: {
@@ -779,7 +820,12 @@ export default {
       // }).then(function (response){
       }).then(response =>{
         console.log(response);
-        this.schools = response.data.data;
+        this.schools = response.data.data.schools;
+        this.grades = response.data.data.grades;
+        this.periods = response.data.data.periods;
+        this.isOnlyMajors = response.data.data.isOnlyMajors;
+        this.assessments = response.data.data.assessments;
+        this.states = response.data.data.states;
       })
     },
     submitUpload(){
@@ -798,14 +844,13 @@ export default {
       console.log("row",row);
       self.dialogVisible = true;
       self.updateData = row;
-      // self.getSchools();
       self.schoolValue = row.schoolValue;
     },
     handlerAddOk(){ //修改对话框上的"确定"按钮
       let self = this;
       this.$refs["updateData"].validate(valid =>{
         if (valid){
-          this.$axios.put('/sys/stu/update', self.updateData, {
+          this.$axios.put('/sys/course/update', self.updateData, {
             headers: {
               "Content-Type": "application/json;charset=utf-8"
             },
@@ -835,7 +880,6 @@ export default {
     },
     add(){ //点击"修改"按钮弹出修改对话框
       this.addDialogVisible = true;
-      // self.getSchools();
       this.addData = {};
       this.selectedOptions=[];
       // this.form.nation = '';
@@ -843,12 +887,11 @@ export default {
       console.log("addData",this.addData);
     },
     addStudent(){ //修改对话框上的"确定"按钮
-      this.addData.photoUrl = this.photoUrl;
       console.log("addData",this.addData);
       this.$refs["addData"].validate(valid =>{
         if(valid){
           let self = this;
-          this.$axios.post('/sys/stu/add', self.addData, {
+          this.$axios.post('/sys/course/add', self.addData, {
             headers: {
               "Content-Type": "application/json;charset=utf-8"
             },
@@ -895,7 +938,7 @@ export default {
           }
           sid = sid.substring(0,sid.length-1);
           console.log(sid);
-          this.$axios.delete('/sys/stu/batchDelete', {	
+          this.$axios.delete('/sys/course/batchDelete', {	
             params: {	// 请求参数拼接在url上
               sid: sid
             }
@@ -932,55 +975,14 @@ export default {
       let self = this;
       self.multipleSelection = rows;
     },
-    uploadUpdateSuccess(response, file, fileList) {
-      console.log(fileList);
-      this.updateData.photoUrl = `${this.qiniuaddr}/${response.key}`;
-      console.log(this.updateData.photoUrl);
-      //在这里你就可以获取到上传到七牛的外链URL了
-    },
-    uploadSuccess(response, file, fileList) {
-      console.log(fileList);
-      this.photoUrl = `${this.qiniuaddr}/${response.key}`;
-      console.log(this.photoUrl);
-      //在这里你就可以获取到上传到七牛的外链URL了
-    },
-    beforeAvatarUpload(file) {
-      const isPNG = file.type === "image/png";
-      const isJPEG = file.type === "image/jpeg";
-      const isJPG = file.type === "image/jpg";
-      //可以上传pdf等文件
-      // let extension = file.name.substring(file.name.lastIndexOf('.')+1)
-      // const isPDF = extension === "pdf";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isPNG && !isJPEG && !isJPG) {
-        this.$message.error("上传头像图片只能是 jpg、png、jpeg 格式!");
-        return false;
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
-      }
-      return (isJPG|isJPEG|isPNG) && isLt2M;
-    }
   },
   created() {
     if(!this.$store.state.isLogin) {
       this.$router.push({name: 'SysLogin', params: {isReload: 'true'}});
     }
 
-    var token;
-    var policy = {};
-    var bucketName = 'wanglei2022';
-    var AK ='hNl-AywgdWuBco20kCxR6rPMUB-uOV8Hlih7o_gI';
-    var SK = 'LZOs_CcKGSsPac8krncFZFJU38Hgd6lCipLZli6x';
-    var deadline = Math.round(new Date().getTime() / 1000) + 3600;
-    policy.scope = bucketName;
-    policy.deadline = deadline;
-    token=genUpToken(AK, SK, policy);
-    this.postData.token=token;
-
     this.showAllUserInfo();
-    this.getSchools();
+    this.getSelections();
   },
 };
 </script>

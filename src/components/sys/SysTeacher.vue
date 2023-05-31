@@ -469,6 +469,7 @@
             drag
             ref="uploadExcel"
             action="http://localhost:8902/sys/tea/import"
+            :with-credentials="true" 
             :limit=limitNum
             :auto-upload="false"
             accept=".xlsx"

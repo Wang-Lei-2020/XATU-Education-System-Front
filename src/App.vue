@@ -165,13 +165,13 @@
                                 <span>教师信息</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item class="submenu" index="/schedule">
+                        <el-menu-item class="submenu" index="/sysCourse">
                             <template v-slot:title>
                                 <i class="el-icon-pie-chart"></i>
                                 <span>课程信息</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item class="submenu" index="/userInfo">
+                        <el-menu-item class="submenu" index="/sysSingleCourse">
                             <template v-slot:title>
                                 <i class="el-icon-info"></i>
                                 <span>课堂信息</span>
