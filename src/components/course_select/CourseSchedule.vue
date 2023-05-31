@@ -14,50 +14,50 @@
         </el-table-column>
         <el-table-column prop="mon" label="周一">
           <template v-slot="scope">
-            <template v-if="scope.row.mon">
-              <schedule-ceil :course="scope.row.mon" :mode="mode" />
+            <template v-if="scope.row['1']">
+              <schedule-ceil :course="scope.row['1']" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="tue" label="周二">
           <template v-slot="scope">
-            <template v-if="scope.row.tue">
-              <schedule-ceil :course="scope.row.tue" :mode="mode" />
+            <template v-if="scope.row['2']">
+              <schedule-ceil :course="scope.row['2']" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="wedn" label="周三">
           <template v-slot="scope">
-            <template v-if="scope.row.wedn">
-              <schedule-ceil :course="scope.row.wedn" :mode="mode" />
+            <template v-if="scope.row['3']">
+              <schedule-ceil :course="scope.row['3']" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="thur" label="周四">
           <template v-slot="scope">
-            <template v-if="scope.row.thur">
-              <schedule-ceil :course="scope.row.thur" :mode="mode" />
+            <template v-if="scope.row['4']">
+              <schedule-ceil :course="scope.row['4']" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="fri" label="周五">
           <template v-slot="scope">
-            <template v-if="scope.row.fri">
-              <schedule-ceil :course="scope.row.fri" :mode="mode" />
+            <template v-if="scope.row['5']">
+              <schedule-ceil :course="scope.row['5']" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="sat" label="周六">
           <template v-slot="scope">
-            <template v-if="scope.row.sat">
-              <schedule-ceil :course="scope.row.sat" :mode="mode" />
+            <template v-if="scope.row['6']">
+              <schedule-ceil :course="scope.row['6']" :mode="mode" />
             </template>
           </template>
         </el-table-column>
         <el-table-column prop="sun" label="周日">
           <template v-slot="scope">
-            <template v-if="scope.row.sun">
-              <schedule-ceil :course="scope.row.sun" :mode="mode" />
+            <template v-if="scope.row['7']">
+              <schedule-ceil :course="scope.row['7']" :mode="mode" />
             </template>
           </template>
         </el-table-column>

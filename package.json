@@ -49,7 +49,9 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "vue/no-deprecated-v-bind-sync": 0
+    }
   },
   "browserslist": [
     "> 1%",

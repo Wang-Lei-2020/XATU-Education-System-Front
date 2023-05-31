@@ -27,7 +27,7 @@
         <el-table-column prop="teacher" label="上课教师" width="120"></el-table-column>
         <el-table-column label="时间地点" width="200">
           <template v-slot="scope">
-            <span>{{ parseCourseTime(scope.row.schedule.time) + '/' + scope.row.schedule.location }}</span>
+            <span>{{ parseCourseTime(scope.row.dayTime, scope.row.hourPeriod) + '/' + scope.row.location }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -63,7 +63,7 @@
         <el-table-column prop="teacher" label="上课教师" width="120"></el-table-column>
         <el-table-column label="时间地点" width="200">
           <template v-slot="scope">
-            <span>{{ parseCourseTime(scope.row.schedule.time) + '/' + scope.row.schedule.location }}</span>
+            <span>{{ parseCourseTime(scope.row.dayTime, scope.row.hourPeriod) + '/' + scope.row.location }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -100,7 +100,7 @@
         <el-table-column prop="teacher" label="上课教师" width="120"></el-table-column>
         <el-table-column label="时间地点" width="200">
           <template v-slot="scope">
-            <span>{{ parseCourseTime(scope.row.schedule.time) + '/' + scope.row.schedule.location }}</span>
+            <span>{{ parseCourseTime(scope.row.dayTime, scope.row.hourPeriod) + '/' + scope.row.location }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -147,16 +147,15 @@ export default {
     this.refreshData();
   },
   methods: {
-    parseCourseTime(time) {
-      const [week, index] = time.split(',');
+    parseCourseTime(week, index) {
       const weekMap = {
-        mon: '星期一',
-        tue: '星期二',
-        wedn: '星期三',
-        thur: '星期四',
-        fri: '星期五',
-        sat: '星期六',
-        sun: '星期日'
+        1: '星期一',
+        2: '星期二',
+        3: '星期三',
+        4: '星期四',
+        5: '星期五',
+        6: '星期六',
+        7: '星期日'
       };
       return `${weekMap[week]},第${index}节`;
     },

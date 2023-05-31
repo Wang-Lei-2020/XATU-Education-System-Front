@@ -20,16 +20,19 @@
             >
             </Table>
         </el-row>
-
+        <el-dialog title="导入平时成绩" :visible.sync="dialogFormVisible">
+            <import-usual :course="course" :courseIndex="courseIndex" />
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import Table from "@/components/common/CustomTable/CustomTable.vue";
+import ImportUsual from './ImportUsual.vue';
 
 export default {
     name: "StudentList",
-    components: {Table},
+    components: {Table, ImportUsual},
     data() {
         return {
             loading: false,
@@ -48,6 +51,9 @@ export default {
                     number: "22126357",
                 }
             ],
+            dialogFormVisible: false,
+            course: 'C10004',
+            courseIndex: 1,
         };
     },
     created() {
@@ -68,7 +74,7 @@ export default {
         },
         //导入平时成绩
         ImportScore(){
-
+            this.dialogFormVisible = true;
         }
     },
     computed: {},
