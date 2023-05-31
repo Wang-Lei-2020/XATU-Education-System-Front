@@ -556,7 +556,7 @@ export default {
       statusValue:'',
 
       addDialogVisible:false,
-      Title1:"添加学生",
+      Title1:"添加课堂",
       addData:{},
 
       multipleSelection:[], //多选时绑定的数据
@@ -569,7 +569,7 @@ export default {
 
       updateData:{}, //"修改"对话框中表单数据的初始化
       dialogVisible:false, //"修改"对话框是否可见
-      Title:"修改学生", //"修改"对话框的标题
+      Title:"修改课堂", //"修改"对话框的标题
       rules:{ //表单验证
         name:[{ required:true,message:'课程名称不能为空',trigger:'blur'}],
         nameEn:[{ required:true,message:'课程英文名称不能为空',trigger:'blur'}],

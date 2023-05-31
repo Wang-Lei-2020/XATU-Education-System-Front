@@ -20,7 +20,7 @@
             >
             </Table>
         </el-row>
-        <el-dialog title="导入平时成绩" :visible.sync="dialogFormVisible">
+        <el-dialog title="导入平时成绩" :visible="dialogFormVisible">
             <import-usual :course="course" :courseIndex="courseIndex" />
         </el-dialog>
     </div>
