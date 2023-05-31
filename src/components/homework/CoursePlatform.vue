@@ -56,6 +56,8 @@ export default {
     components: {CourseCard},
     data() {
         return {
+            role:"",
+            studentId:"",
             isCourseList: false,
             activeName: "first",
             courseCardList: [],
@@ -78,6 +80,13 @@ export default {
         };
     },
     created() {
+        //登录角色
+        if(this.$store.state.isLogin){
+            this.studentId = this.$store.state.number
+            this.role = sessionStorage.getItem('role')
+        }
+        else this.$message.error('登录会话已过期')
+
         //待完成作业课程数、列表
         if (this.homeworkCourseList.length != 0) {
             let children = [];

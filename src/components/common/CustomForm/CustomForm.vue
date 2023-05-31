@@ -9,8 +9,12 @@
                 <!-- 输入框 -->
                 <el-input v-model="ruleForm[item.prop]" :placeholder="item.placeholder" v-if="item.type=='Input' "
                           :style="{width: item.width}" :readonly="item.readonly" :show-password="item.password"
+                          :maxlength="item.maxlength"   show-word-limit
                 ></el-input>
-
+                <!-- 输入框  数字 -->
+                <el-input v-model.number="ruleForm[item.prop]" :placeholder="item.placeholder" v-if="item.type=='Input_number' "
+                          :style="{width: item.width}" :readonly="item.readonly" :show-password="item.password"
+                ></el-input>
                 <!-- 选择框 -->
                 <el-select v-model="ruleForm[item.prop]" :placeholder="item.placeholder" v-if="item.type=='Select'">
                     <el-option :label="o.label" :value="o.value" v-for="(o,i) in item.options" :key="i"></el-option>
@@ -32,7 +36,8 @@
                 <!-- 文本框 -->
                 <el-col :span="item.span || 10">
                     <el-input type="textarea" v-model="ruleForm[item.prop]" v-if="item.type=='Textarea'"
-                              :placeholder="item.placeholder" :rules="item.rules"></el-input>
+                              :placeholder="item.placeholder" :rules="item.rules"
+                              :maxlength="item.maxlength"   show-word-limit></el-input>
                 </el-col>
 
                 <!-- 三种时间组件 -->
@@ -59,7 +64,7 @@
         <div class="buttonGroup">
             <el-form-item>
                 <el-button :type="b.type" @click="callSelf('ruleForm',b.action,b.call)" v-for="(b,k) in buttons"
-                           :key="k">{{ b.label }}
+                           :key="k" :style="b.style" >{{ b.label }}
                 </el-button>
             </el-form-item>
         </div>
@@ -173,9 +178,6 @@ export default {
 </script>
 
 <style scoped>
-.buttonGroup {
-    float: right;
-}
 
 
 </style>

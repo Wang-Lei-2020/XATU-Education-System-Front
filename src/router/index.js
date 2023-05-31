@@ -5,10 +5,10 @@ import Register from "@/components/user/Register";
 import VueCookies from 'vue-cookies';
 import Home from "@/components/Home";
 import SysLogin from "@/components/sys/SysLogin";
-import CoursePlatform from "@/components/homework/CoursePlatform";
-import CoursePage from "@/components/homework/CoursePage";
+import CoursePlatform from "@/components/homework/CoursePlatform.vue";
+import CoursePage from "@/components/homework/CoursePage.vue";
 import HomePage from "@/components/homework/HomePage";
-import HomeworkList from "@/components/homework/HomeworkList";
+import HomeworkList from "@/components/homework/student/HomeworkList.vue";
 import CourseInfo from "@/components/homework/CourseInfo";
 import CourseSchedule from '@/components/course_select/CourseSchedule';
 import CourseSelect from '@/components/course_select/CourseSelect';
@@ -19,8 +19,12 @@ import SysCourse from "@/components/sys/SysCourse";
 import SysSingleCourse from "@/components/sys/SysSingleCourse";
 import ChangePassword from "@/components/user/ChangePassword";
 import CourseList from "@/components/homework/CourseList.vue";
-import HomeworkPage from "@/components/homework/HomeworkPage.vue";
-
+import HomeworkPage from "@/components/homework/student/HomeworkPage.vue";
+import THomeworkList from "@/components/homework/teacher/THomeworkList.vue";
+import AddHomework from "@/components/homework/teacher/AddHomework.vue";
+import StudentHomeworkList from "@/components/homework/teacher/StudentHomeworkList.vue";
+import TeacherHomeworkPage from "@/components/homework/teacher/TeacherHomeworkPage.vue";
+import CourseScore from '@/components/course_score/CourseScore'
 
 
 Vue.use(VueRouter)
@@ -64,6 +68,11 @@ const routes = [
         component: CourseSchedule
     },
     {
+        path: '/course_score',
+        name: 'courseScore',
+        component: CourseScore
+    },
+    {
         path: '/sysHome',
         name: 'SysHome',
         component: SysHome
@@ -102,15 +111,20 @@ const routes = [
             name: 'HomePage',
             component: HomePage
         },
-        {
-            path: '/coursepage/info',
-            name: 'CourseInfo',
-            component: CourseInfo
-        }, {
-            path: '/coursepage/homeworklist',
-            name: 'HomeworkList',
-            component: HomeworkList
-        }]
+            {
+                path: '/coursepage/info',
+                name: 'CourseInfo',
+                component: CourseInfo
+            }, {
+                path: '/coursepage/homeworklist',
+                name: 'HomeworkList',
+                component: HomeworkList
+            }, {
+                path: '/coursepage/thomeworklist',
+                name: 'THomeworkList',
+                component: THomeworkList
+
+            }]
     },
     {
         path: '/courselist',
@@ -126,6 +140,19 @@ const routes = [
         path: '/changePassword',
         name: 'ChangePassword',
         component: ChangePassword
+    },
+    {
+        path: '/addhomework',
+        name: 'AddHomework',
+        component: AddHomework
+    },{
+        path: '/studenthomeworklist',
+        name: 'StudentHomeworkList',
+        component: StudentHomeworkList
+    },{
+        path: '/teacherhomeworkpage',
+        name: 'TeacherHomeworkPage',
+        component: TeacherHomeworkPage
     }
 
 ];
@@ -135,7 +162,6 @@ const router = new VueRouter({
     // base: process.env.BASE_URL,
     routes: routes
 })
-
 
 
 export default router

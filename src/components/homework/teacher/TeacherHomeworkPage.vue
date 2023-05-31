@@ -25,24 +25,26 @@
         </el-row>
         <el-row>
             <el-divider></el-divider>
-            <div class="editor">
-                <Editor></Editor>
-            </div>
-            <div class="action">
-                <el-button size="mini" @click="submit">提交</el-button>
-                <el-button size="mini" @click="cancel">取消</el-button>
-            </div>
+            <Form
+                    :formWidth="formWidth"
+                    :formData="formData"
+                    :buttons="formButtons"
+                    :inline=false
+                    class="form"
+            >
+            </Form>
         </el-row>
     </div>
 </template>
 <script>
-import Editor from "./HomeworkEditor.vue"
+import Form from "@/components/common/CustomForm/CustomForm.vue"
 
 export default {
-    components: {Editor,},
+    components: {Form},
     data() {
         return {
-            content: "<h2>要求：</h2><h2>（1）个人完成</h2><h2>（2）将解答写在纸上</h2><h2>（3）5月31日课上提交</h2><p><img src=\"http://cdn.wanglei99.xyz/FraYnRVJ-C9J2w72dEeLH9Rj1sDi\"></p>",
+            name: "TeacherHomeworkPage",
+            content: "答案",
             editorOption: {
                 modules: {
                     toolbar: {
@@ -52,20 +54,36 @@ export default {
                 readyOnly: true,
                 theme: 'snow',
             },
+            formWidth: "100px",
+            formData: [
+                {
+                    prop: "score", label: "作业得分", type: 'Input_number', width: '200px',
+                    rules: [{required: true, message: '请输入分数占比', trigger: 'blur'},
+                        {min: 1, max: 100, type: "number", message: '分数在1-100之间', trigger: 'blur'}]
+                },
+                {
+                    prop: 'comment', type: 'Textarea', label: '评价', width: '300px', maxlength:"50"
+                },
+
+            ],
+            formButtons: [
+                {
+                    label: '发布',
+                    type: 'primary',
+                    action: 'submit',
+                    call: (data) => {
+                        console.log(data)
+                    },
+                    style: 'margin-left:30%'
+                }
+            ],
+
         };
     },
     methods: {
         focus(event) {
             event.enable(false);  //设置富文本编辑器不可编辑
         },
-        submit(){
-            alert("提交成功")
-            this.$router.push({name: 'HomeworkList'})
-
-        },
-        cancel(){
-            this.$router.push({name: 'HomeworkList'})
-        }
     },
     created() {
     }
@@ -94,7 +112,8 @@ export default {
     font-size: 16px;
     color: #000;
 }
-.action{
+
+.action {
     margin-left: 45%;
 }
 

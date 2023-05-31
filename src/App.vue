@@ -98,12 +98,12 @@
                 <el-row class="tac">
                     <el-menu router :default-active="this.$route.path" >
 
-                        <el-submenu v-if="isStudent" index="3">
+                        <el-submenu v-if="isStudent || isTeacher" index="3">
                             <template v-slot:title>
                                 <i class="el-icon-location"></i>
                                 <span>选课系统</span>
                             </template>
-                            <el-menu-item v-if="isStudent" class="submenu" index="/course_select/schedule">
+                            <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/course_select/schedule">
                                 <template v-slot:title>
                                     <i class="el-icon-zoom-in"></i>
                                     <span>课程表</span>
@@ -116,7 +116,7 @@
                                 </template>
                             </el-menu-item>
                         </el-submenu>
-                        <el-menu-item v-if="isStudent" class="submenu" index="/courseplatform">
+                        <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/courseplatform">
                             <template v-slot:title>
                                 <i class="el-icon-document"></i>
                                 <span>课程平台</span>
@@ -128,13 +128,13 @@
                                 <span>评教系统</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item v-if="isStudent" class="submenu" index="/schedule">
+                        <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/course_score">
                             <template v-slot:title>
                                 <i class="el-icon-pie-chart"></i>
                                 <span>成绩查看</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item v-if="isStudent" class="submenu" index="/userInfo">
+                        <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/userInfo">
                             <template v-slot:title>
                                 <i class="el-icon-info"></i>
                                 <span>个人信息</span>
