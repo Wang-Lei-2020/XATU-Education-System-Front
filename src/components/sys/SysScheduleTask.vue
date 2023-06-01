@@ -6,10 +6,17 @@
           <el-form-item label="学年" prop="term">
             <el-input v-model="searchData.term"></el-input>
           </el-form-item>
-        </el-col>  
+        </el-col>
         <el-col :span="6">
           <el-form-item label="时段" prop="number">
-            <el-input v-model="searchData.number"></el-input>
+            <el-select v-model="searchData.period" placeholder="请选择" clearable>
+              <el-option
+                v-for="item in periods"
+                :key="item.desc"
+                :label="item.desc"
+                :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>

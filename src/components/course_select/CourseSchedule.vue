@@ -9,7 +9,8 @@
       :cell-style="{padding: '3px 0'}" :header-cell-style="{padding: '6px 0'}" :row-style="{height: '100px'}">
         <el-table-column label="">
           <template v-slot="scope">
-            <span>第{{ scope.$index + 1 }}节</span>
+            <div>第{{ scope.$index + 1 }}节</div>
+            <div>{{getHourInfo(scope.$index + 1)}}</div>
           </template>
         </el-table-column>
         <el-table-column prop="mon" label="周一">
@@ -67,7 +68,7 @@
 </template>
 
 <script>
-
+import Vue from 'vue';
 import print from "print-js";
 import ScheduleCeil from './ScheduleCeil.vue'
 export default {
@@ -79,7 +80,8 @@ export default {
   data() {
     return {
       scheduleTable: [],
-      mode: 0
+      mode: 0,
+      hourMap: []
     }
   },
   computed: {
@@ -107,8 +109,33 @@ export default {
       this.mode = 2;
     }
     this.getSchedule();
+    this.$axios.get('/course/enums/hour').then(res => {
+      this.hourMap = res.data.data;
+    })
   },
   methods: {
+    getHourInfo(index) {
+      return this.hourMap[index - 1].desc;
+    },
+    handleUnLogin(response) {
+      // 这里是用户token不正确的回调
+      //删除vuex中存储的用户信息
+      this.$store.dispatch('setUser', null);
+      //删除session中存储的信息
+      sessionStorage.clear();
+      //删除cookie中存储的信息
+      const cookies = Vue.$cookies.keys();
+      for (let i = 0; i < cookies.length; i++) {
+          Vue.$cookies.remove(cookies[i]);
+      }
+
+      this.$message({
+          message: response.data.msg + '！请重新登录！',
+          type: 'warning',
+          duration: 2000
+      });
+      this.$router.push({name:"Login",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
+    },
     /** 获取课程表 */
     getSchedule() {
       console.log(this.mode);
@@ -119,8 +146,12 @@ export default {
             studentNumber
           }
         }).then(res => {
-          console.log(res.data);
-          this.scheduleTable = res.data.data;
+          if(res.data.code === '0000') {
+            console.log(res.data);
+            this.scheduleTable = res.data.data;
+          } else if(res.data.code === '1002') {
+            this.handleUnLogin(res);
+          }
         })
       } else if(this.isTeacher) {
         const teacherNumber = this.$store.state.number;
@@ -129,8 +160,13 @@ export default {
             teacherNumber
           }
         }).then(res => {
-          console.log(res.data);
-          this.scheduleTable = res.data.data;
+          if(res.data.code === '0000') {
+            console.log(res.data);
+            this.scheduleTable = res.data.data;
+          }
+          else if(res.data.code === '1002') {
+            this.handleUnLogin(res);
+          }
         })
       }
     },

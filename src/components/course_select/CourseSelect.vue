@@ -119,7 +119,7 @@ export default {
   components: {},
   data() {
     return {
-      selectAvailable: true,
+      selectAvailable: false,
       // 可选课程列表
       availableList: [],
       // 冲突课程列表
@@ -144,7 +144,23 @@ export default {
   },
   mounted() {
     console.log('mounted!');
-    this.refreshData();
+
+    this.$axios.get('/sys/task/status').then(res => {
+      if(res.data.code === '0000') {
+        this.selectAvailable = (res.data.data === 1);
+        if(this.selectAvailable) {
+          this.refreshData();
+        }
+      } 
+      // 这里是用户token不正确的回调
+      else if (res.data.code === '1002') {
+        this.handleUnLogin(res);
+      }
+      else {
+        this.selectAvailable = false;
+        this.$message.error('获取选课任务失败');
+      }
+    })
   },
   methods: {
     parseCourseTime(week, index) {
@@ -190,14 +206,35 @@ export default {
           studentNumber
         }
       }).then(res => {
-        const conflictingMap = res.data.data;
-        let resultList = [];
-        for(const key in conflictingMap) {
-          resultList.push({courseNum: key, fullLine: 1});
-          resultList = resultList.concat(conflictingMap[key]);
+        if(res.data.code === '0000') {
+          const conflictingMap = res.data.data;
+          let resultList = [];
+          for(const key in conflictingMap) {
+            resultList.push({courseNum: key, fullLine: 1});
+            resultList = resultList.concat(conflictingMap[key]);
+          }
+          this.conflictingList = resultList;
         }
-        this.conflictingList = resultList;
       })
+    },
+    handleUnLogin(response) {
+      // 这里是用户token不正确的回调
+      //删除vuex中存储的用户信息
+      this.$store.dispatch('setUser', null);
+      //删除session中存储的信息
+      sessionStorage.clear();
+      //删除cookie中存储的信息
+      const cookies = Vue.$cookies.keys();
+      for (let i = 0; i < cookies.length; i++) {
+          Vue.$cookies.remove(cookies[i]);
+      }
+
+      this.$message({
+          message: response.data.msg + '！请重新登录！',
+          type: 'warning',
+          duration: 2000
+      });
+      this.$router.push({name:"Login",params:{isReload: 'true',msg: response.data.msg + '！请重新登录！'}});
     },
     /** 获取已选课程 */
     listSelectedCourse() {
