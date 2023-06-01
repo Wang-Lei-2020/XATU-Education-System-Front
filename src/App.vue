@@ -177,6 +177,12 @@
                                 <span>课堂信息</span>
                             </template>
                         </el-menu-item>
+                        <el-menu-item class="submenu" index="/sysSchedule">
+                            <template v-slot:title>
+                                <i class="el-icon-info"></i>
+                                <span>选课发布</span>
+                            </template>
+                        </el-menu-item>
                     </el-menu>
                 </el-row>
             </el-col>

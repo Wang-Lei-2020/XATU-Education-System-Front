@@ -17,6 +17,7 @@ import SysStudent from "@/components/sys/SysStudent";
 import SysTeacher from "@/components/sys/SysTeacher";
 import SysCourse from "@/components/sys/SysCourse";
 import SysSingleCourse from "@/components/sys/SysSingleCourse";
+import SysScheduleTask from "@/components/sys/SysScheduleTask";
 import ChangePassword from "@/components/user/ChangePassword";
 import CourseList from "@/components/homework/CourseList.vue";
 import HomeworkPage from "@/components/homework/student/HomeworkPage.vue";
@@ -96,7 +97,12 @@ const routes = [
         path: '/sysSingleCourse',
         name: 'SysSingleCourse',
         component: SysSingleCourse
-    },  
+    },
+    {
+        path: '/sysSchedule',
+        name: 'SysSchedule',
+        component: SysScheduleTask
+    },
     {
         path: '/courseplatform',
         name: 'CoursePlatform',
