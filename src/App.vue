@@ -94,7 +94,7 @@
   
         <!-- 学生教师端的侧边栏 -->
         <el-main v-if="getLoginState && !isSystem" class="main">
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-row class="tac">
                     <el-menu router :default-active="this.$route.path" >
 
@@ -143,14 +143,14 @@
                     </el-menu>
                 </el-row>
             </el-col>
-            <el-col v-if="getLoginState" :span="20">
+            <el-col v-if="getLoginState" :span="21">
                 <router-view></router-view>
             </el-col>
         </el-main>
 
         <!-- 系统端的侧边栏 -->
         <el-main v-if="getLoginState && isSystem" class="main">
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-row class="tac">
                     <el-menu router :default-active="this.$route.path" >
                         <el-menu-item class="submenu" index="/sysStudent">
@@ -186,12 +186,12 @@
                     </el-menu>
                 </el-row>
             </el-col>
-            <el-col v-if="getLoginState" :span="20">
+            <el-col v-if="getLoginState" :span="21">
                 <router-view></router-view>
             </el-col>
         </el-main>
 
-        <el-main v-if="!getLoginState" class="main">
+        <el-main v-if="!getLoginState" class="main" :span="21">
             <router-view></router-view>
         </el-main>
   
