@@ -311,7 +311,14 @@
           <el-row>
             <el-col :span="10" :offset="0">
               <el-form-item label="课容量" prop="capacity" >
-                <el-input v-model="updateData.capacity"></el-input>
+                <el-select v-model="updateData.capacity" placeholder="请选择">
+                  <el-option
+                    v-for="item in capacitys"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="10" :offset="1">
@@ -362,18 +369,25 @@
         <el-form :model="addData" :rules="rules" ref="addData" label-width="100px">
           <el-row>
             <el-col :span="10" :offset="0">
-              <el-form-item label="课程编号" prop="number">
-                <el-input v-model="addData.number"></el-input>
+              <el-form-item label="课程名称" prop="courseNum">
+                <el-select v-model="addData.courseNum" filterable  placeholder="请选择" @change="changeValue($event)">
+                  <el-option
+                    v-for="item in courses"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.number">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col> 
             <el-col :span="10" :offset="1">
-              <el-form-item label="开课学院" prop="school">
-                <el-select v-model="addData.school" placeholder="请选择">
+              <el-form-item label="上课教师" prop="teacher">
+                <el-select v-model="addData.teacher" placeholder="请选择">
                   <el-option
-                    v-for="item in schools"
-                    :key="item.desc"
-                    :label="item.desc"
-                    :value="item.code">
+                    v-for="item in teachers"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.number">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -381,79 +395,48 @@
           </el-row>  
           <el-row>
             <el-col :span="10" :offset="0">
-                <el-form-item label="课程名称" prop="name">
-                  <el-input v-model="addData.name"></el-input>
-                </el-form-item>
+              <el-form-item label="上课时间" prop="dayTime">
+                <el-select v-model="addData.dayTime" placeholder="请选择">
+                  <el-option
+                    v-for="item in weeks"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>   
             <el-col :span="10" :offset="1">
-                <el-form-item label="课程英文名" prop="nameEn">
-                  <el-input v-model="addData.nameEn"></el-input>
-                </el-form-item>
+              <el-form-item label="上课时段" prop="hourPeriod">
+                <el-select v-model="addData.hourPeriod" placeholder="请选择">
+                  <el-option
+                    v-for="item in hourPeriods"
+                    :key="item.desc"
+                    :label="item.desc"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>                                      
           </el-row>
           <el-row>
             <el-col :span="10" :offset="0">
-              <el-form-item label="开课时段" prop="period">
-                <el-select v-model="addData.period" placeholder="请选择">
-                  <el-option
-                    v-for="item in periods"
-                    :key="item.desc"
-                    :label="item.desc"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
+              <el-form-item label="上课地点" prop="location">
+                <el-input   v-model="addData.location"></el-input>
               </el-form-item>
             </el-col> 
             <el-col :span="10" :offset="1">
-              <el-form-item label="开课年级" prop="grade">
-                <el-select v-model="addData.grade" placeholder="请选择">
+              <el-form-item label="课容量" prop="capacity">
+                <el-select v-model="addData.capacity" placeholder="请选择">
                   <el-option
-                    v-for="item in grades"
-                    :key="item.desc"
-                    :label="item.desc"
-                    :value="item.code">
+                    v-for="item in capacitys"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>             
-          </el-row>
-          <el-row>         
-            <el-col :span="10" :offset="0">
-              <el-form-item label="学分" prop="credit">
-                <el-input   v-model="addData.credit"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="1">
-              <el-form-item label="学时" prop="creditHour">
-                <el-input   v-model="addData.creditHour"></el-input>
-              </el-form-item>
-            </el-col>            
-          </el-row>
-          <el-row>
-            <el-col :span="10" :offset="0">
-              <el-form-item label="限选说明" prop="isOnlyMajor">
-                <el-select v-model="addData.isOnlyMajor" placeholder="请选择">
-                  <el-option
-                    v-for="item in isOnlyMajors"
-                    :key="item.desc"
-                    :label="item.desc"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>        
-            <el-col :span="10" :offset="1">
-              <el-form-item label="考核方式" prop="assessment" >
-                <el-select v-model="addData.assessment" placeholder="请选择">
-                  <el-option
-                    v-for="item in assessments"
-                    :key="item.desc"
-                    :label="item.desc"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>                
           </el-row>
           <el-row>
             <el-col :span="22" :offset="0">
@@ -554,6 +537,34 @@ export default {
       //课程状态
       states:[],
       statusValue:'',
+      //课程
+      courses:[],
+      //教师
+      teachers:[],
+      //课余量
+      capacitys:[
+        {
+          value: 30,
+        },       
+        {
+          value: 60,
+        },       
+        {
+          value: 90,
+        },       
+        {
+          value: 120,
+        },       
+        {
+          value: 150,
+        },       
+        {
+          value: 180,
+        }
+      ],
+      periods:[],
+      grades:[],
+      isOnlyMajors:[],
 
       addDialogVisible:false,
       Title1:"添加课堂",
@@ -571,19 +582,14 @@ export default {
       dialogVisible:false, //"修改"对话框是否可见
       Title:"修改课堂", //"修改"对话框的标题
       rules:{ //表单验证
-        name:[{ required:true,message:'课程名称不能为空',trigger:'blur'}],
-        nameEn:[{ required:true,message:'课程英文名称不能为空',trigger:'blur'}],
-        number:[{required:true,message:'课程编号不能为空',trigger:'blur'},
-        { pattern:/^(C)[0-9]*$/,message:'学号输入格式错误，应为5位数字',trigger:'blur'},
-        { min:6,max:6,message:'学号输入长度错误，应为5位数字',trigger:'blur'}],
-        school:[{required:true,message:'开课学院不能为空',trigger:'blue'}],
-        grade:[{required:true,message:'开课年级不能为空',trigger:'blue'}],
-        credit:[{required:true,message:'学分不能为空',trigger:'blue'}],
-        creditHour:[{required:true,message:'学时不能为空',trigger:'blue'}],
-        period:[{ required:true,message:'开课时段不能为空',trigger:'blur'}],
-        isOnlyMajor:[{ required:true,message:'限选说明不能为空',trigger:'blur'}],
-        assessment:[{ required:true,message:'考核方式不能为空',trigger:'blur'}],
-        status:[{ required:true,message:'课程状态不能为空',trigger:'blur'}],
+        courseNum:[{ required:true,message:'课程名称不能为空',trigger:'blur'}],
+        teacher:[{ required:true,message:'上课教师不能为空',trigger:'blur'}],
+        location:[{required:true,message:'上课地点不能为空',trigger:'blur'},
+        { pattern:/^(DQ|SX|SY|SD|YF)[0-9]*$/,message:'上课地点输入格式错误',trigger:'blur'},
+        { min:5,max:5,message:'上课地点输入长度错误，应为3位数字',trigger:'blur'}],
+        hourPeriod:[{required:true,message:'上课时段不能为空',trigger:'blue'}],
+        dayTime:[{required:true,message:'上课时间不能为空',trigger:'blue'}],
+        capacity:[{required:true,message:'课容量不能为空',trigger:'blue'}],
       }
     };
   },
@@ -768,7 +774,45 @@ export default {
         this.weeks = response.data.data.weeks;
         this.hourPeriods = response.data.data.hourPeriods;
         this.states = response.data.data.states;
+        this.periods = response.data.data.periods;
+        this.grades = response.data.data.grades;
+        this.isOnlyMajors = response.data.data.isOnlyMajors;
       })
+    },
+    //获取所有课程
+    getAllCourses(){
+      this.$axios.get('/sys/singleCourse/getAllCourses', {
+      // params:{            
+      // },
+      headers: {
+        "Content-Type": "application/json;charset=utf-8"
+      },
+      withCredentials: true
+      // }).then(function (response){
+      }).then(response =>{
+        console.log(response);
+        this.courses = response.data.data;
+      })
+    },
+    //获取所有教师
+    getAllTeachers(courseNum){
+      this.$axios.get('/sys/singleCourse/getAllTeachers', {
+        params:{
+          courseNum: courseNum,
+        },
+        headers: {
+          "Content-Type": "application/json;charset=utf-8"
+        },
+        withCredentials: true
+        // }).then(function (response){
+      }).then(response =>{
+        console.log(response);
+        this.teachers = response.data.data;
+      })
+    },
+    changeValue(value){
+      console.log(value)
+      this.getAllTeachers(value);
     },
     submitUpload(){
       let self = this;
@@ -824,6 +868,7 @@ export default {
       this.addDialogVisible = true;
       this.addData = {};
       this.selectedOptions=[];
+      this.getAllCourses();
       // this.form.nation = '';
       this.photoUrl = '';
       console.log("addData",this.addData);
@@ -833,7 +878,7 @@ export default {
       this.$refs["addData"].validate(valid =>{
         if(valid){
           let self = this;
-          this.$axios.post('/sys/course/add', self.addData, {
+          this.$axios.post('/sys/singleCourse/add', self.addData, {
             headers: {
               "Content-Type": "application/json;charset=utf-8"
             },
