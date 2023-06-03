@@ -23,7 +23,7 @@
                     <div class="backicon">
                         <img src="../../assets/images/back.png" style="cursor: pointer;" height="30" width="30" @click="back">
                     </div>
-                    <div class="courseName"><span>软件工程经济学</span></div>
+                    <div class="courseName"><span>{{course.courseName}}</span></div>
                 </el-row>
             </el-header>
             <el-main>
@@ -42,17 +42,34 @@ export default {
             userId:"",
             isTeacher:false,
             paths: this.$router.currentRoute.fullPath,
+            course:{}
         };
     },
     created() {
         // console.log(this.$router.currentRoute)
         //登录角色
-        if(this.$store.state.isLogin){
-            this.userId = this.$store.state.number
-            this.role = sessionStorage.getItem('role')
-            if(this.role === "teacher") this.isTeacher = true;
-        }
-        else this.$message.error('登录会话已过期')
+        if (this.$store.state.isLogin) {
+            const role = sessionStorage.getItem('role')
+            this.isTeacher = role == "teacher"
+            const user = sessionStorage.getItem('user')
+            this.userId = JSON.parse(user).number;
+        } else this.$message.error('登录会话已过期')
+
+        // console.log(sessionStorage.getItem("courseNum"))
+        // console.log(sessionStorage.getItem("courseIndex"))
+
+        //获取当前角色课程
+        this.$axios.get('/homework/platform/info', {
+            params: {
+                courseNumber: sessionStorage.getItem("courseNum"),
+                courseIndex: sessionStorage.getItem("courseIndex")
+            }
+        }).then((res) => {
+            // console.log("课程信息",res.data.data)
+            this.course = res.data.data;
+        })
+
+        // this.paths = this.paths+"/homepage"
     },
     methods: {
         handleClick(tab, event) {
@@ -60,6 +77,8 @@ export default {
         },
         back() {
             this.$router.push({name: 'CoursePlatform'})
+            sessionStorage.removeItem("courseNum")
+            sessionStorage.removeItem("courseIndex")
         }
     },
 };

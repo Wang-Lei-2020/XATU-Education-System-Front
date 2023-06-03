@@ -20,8 +20,11 @@
                     :formButtons="formButtons"
             >
                 <template v-slot:tag="scope">
-                    <el-tag type="success">
-                        {{scope.rows.status}}
+                    <el-tag v-if="scope.rows.status == 0"  >
+                        未提交
+                    </el-tag>
+                    <el-tag v-if="scope.rows.status == 1" type="success" >
+                        已提交
                     </el-tag>
                 </template>
                 <template v-slot:action="scope">
@@ -29,11 +32,13 @@
                             size="small"
                             @click="homeworkSubmit(scope)"
                             class="qgreen"
+                            :disabled="scope.rows.status == 0 ? true:false"
                     >查看
                     </el-button>
                 </template>
 
             </Table>
+            <el-button size="mini" class="back" @click="back">返回</el-button>
         </el-row>
 
     </div>
@@ -54,22 +59,14 @@ export default {
                 total: 0, //数据总个数
             },
             Columns: [
-                {prop: "student", label: "姓名", sortable: true},
-                {prop: "number", label: "学号",},
+                {prop: "studentName", label: "姓名", sortable: true},
+                {prop: "student", label: "学号",},
                 {prop: "status", label: "状态",slot:"tag"},
-                {prop: "submit_time", label: "提交时间"},
+                {prop: "updateTime", label: "提交时间"},
                 {slot:"action",  label: "查看内容"},
                 {prop: "score", label: "作业得分"},
             ],
-            rTableData: [
-                {
-                    student: "蒋泽群",
-                    number: "22126357",
-                    submit_time: "/",
-                    status: "未提交",
-                    score:"--"
-                }
-            ],
+            rTableData: [],
             formData: [
                 {prop: "student", label: "姓名", type: 'Input', width: '240px'},
                 {prop: "number", label: "学号", type: 'Input', width: '240px'},
@@ -92,9 +89,26 @@ export default {
         };
     },
     created() {
+        this.getHomeWorkList()
     },
     methods: {
         getHomeWorkList() {
+            //获取学生列表
+            this.$axios.get('/homework/tec/list', {
+                params: {
+                    homework: sessionStorage.getItem("homework"),
+                    courseNumber: sessionStorage.getItem("courseNum"),
+                    courseIndex: sessionStorage.getItem("courseIndex")
+                }
+            }).then((res) => {
+                console.log("学生列表",res.data.data)
+                this.rTableData = res.data.data
+                this.rTableData.forEach(function (element){
+                    if(element.score == null)
+                        element.score = "--"
+                })
+                // this.rTableData = res.data.data;
+            })
 
         },
         changeCurrent(val) {
@@ -105,7 +119,11 @@ export default {
         },
         homeworkSubmit(val){
             console.log(val);
-            this.$router.push({name: 'TeacherHomeworkPage'});
+            this.$router.push({name: 'TeacherHomeworkPage',params:{homework:val.rows}});
+        },
+        back(){
+            this.$router.push({name: 'THomeworkList'});
+            sessionStorage.removeItem("homework");
         }
     },
     computed: {},

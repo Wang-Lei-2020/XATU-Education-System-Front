@@ -20,8 +20,11 @@
                 :formButtons="formButtons"
             >
                 <template v-slot:tag="scope">
-                    <el-tag type="success">
-                        {{scope.rows.status}}
+                    <el-tag v-if="scope.rows.status == 0"  >
+                        未提交
+                    </el-tag>
+                    <el-tag v-if="scope.rows.status == 1" type="success" >
+                        已提交
                     </el-tag>
                 </template>
                 <template v-slot:action="scope">
@@ -29,6 +32,7 @@
                         size="small"
                         @click="homeworkSubmit(scope)"
                         class="qgreen"
+                        :disabled="(scope.rows.isRepeat == 1 && scope.rows.status == 1)||scope.rows.homeworkStatus == 1 ? true:false"
                     >提交
                     </el-button>
                 </template>
@@ -50,26 +54,18 @@ export default {
             loading: false,
             pagination: {
                 current: 1, //当前页
-                size: 5, //页面大小、规定页数为5、10、20、30
+                size: 10, //页面大小、规定页数为5、10、20、30
                 total: 0, //数据总个数
             },
             Columns: [
-                {prop: "title", label: "作业标题", sortable: true},
-                {prop: "teacher", label: "发布人",},
-                {prop: "deadline", label: "提交截止时间"},
-                {slot:"action",  label: "提交作业"},
-                {slot:"tag", prop: "status", label: "状态"},
-                {prop: "score", label: "我的得分"},
+                {prop: "title", label: "作业标题", sortable: true,align: "center"},
+                {prop: "teacher", label: "发布人",align: "center"},
+                {prop: "deadline", label: "提交截止时间",align: "center"},
+                {slot:"action",  label: "提交作业",align: "center"},
+                {slot:"tag", prop: "status", label: "状态",align: "center"},
+                {prop: "score", label: "我的得分",align: "center"},
             ],
-            rTableData: [
-                {
-                    title: "小作业",
-                    teacher: "邸晓飞",
-                    deadline: "2023-05-31 00:00",
-                    status: "进行",
-                    score:"--"
-                }
-            ],
+            rTableData: [],
             formData: [
                 {prop: "number", label: "课程号", type: 'Input', width: '240px'},
                 {prop: "name", label: "课程名称", type: 'Input', width: '240px'},
@@ -92,9 +88,25 @@ export default {
         };
     },
     created() {
+        this.getHomeWorkList()
     },
     methods: {
         getHomeWorkList() {
+            const _this = this
+            _this.$axios.get('/homework/stu/list', {
+                params: {
+                    studentNumber:JSON.parse(sessionStorage.getItem('user')).number,
+                    current: _this.pagination.current,
+                    pageSize: _this.pagination.size
+                }
+            }).then((res) => {
+                // console.log("作业列表", res.data.data)
+                _this.rTableData = res.data.data
+                _this.rTableData.forEach(function(element) {
+                    element.deadline = _this.timeChange(element.deadline)
+                    if(element.score == null) element.score="--"
+                });
+            })
 
         },
         changeCurrent(val) {
@@ -104,8 +116,19 @@ export default {
             console.log(val);
         },
         homeworkSubmit(val){
-            console.log(val);
-            this.$router.push({name: 'HomeworkPage'});
+            // console.log(val);
+            // this.$router.push({name: 'HomeworkPage'});
+            this.$router.push({name:'HomeworkPage',params:{studentHomework:val.rows}});
+        },
+        timeChange(time) {
+            var date = new Date(time);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            var Y = date.getFullYear() + '-';
+            var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            var D = date.getDate() + ' ';
+            var h = date.getHours() + ':';
+            var m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+            var s = date.getSeconds();
+            return Y + M + D + h + m + s;
         }
     },
     computed: {},

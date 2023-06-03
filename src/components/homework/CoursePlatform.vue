@@ -13,9 +13,9 @@
                     <el-tab-pane label="互动提醒" name="first">
                         <el-row>
                             <el-tree
-                              :data="treedata"
-                              :props="defaultProps"
-                              @node-click="handleNodeClick"
+                                    :data="treedata"
+                                    :props="defaultProps"
+                                    @node-click="handleNodeClick"
                             ></el-tree>
                         </el-row>
                     </el-tab-pane>
@@ -31,11 +31,9 @@
                                     v-for="(rows, index) in courseCardList"
                                     :key="index"
                             >
-                                <el-col v-for="course in rows" :key="course.number" :span="8">
+                                <el-col v-for="course in rows" :key="course.courseNum" :span="8">
                                     <CourseCard
-                                            :number="course.number"
-                                            :courseName="course.courseName"
-                                            :teacherName="course.teacherName"
+                                            :course="course"
                                     ></CourseCard>
                                 </el-col>
                             </el-row>
@@ -56,21 +54,14 @@ export default {
     components: {CourseCard},
     data() {
         return {
-            role:"",
-            studentId:"",
-            isCourseList: false,
+            userId: "",
+            isTeacher: false,
             activeName: "first",
             courseCardList: [],
             cardRowNum: 3,
             noiteNum: 10,
-            homeworkCourseList: ["软件工程经济学"],
-            courseList: [
-                {
-                    number: "M510007B",
-                    courseName: "软件工程经济学",
-                    teacherName: "邸晓飞",
-                },
-            ],
+            homeworkCourseList: [],
+            courseList: [],
             treedata: [],
             defaultProps: {
                 children: "children",
@@ -81,40 +72,106 @@ export default {
     },
     created() {
         //登录角色
-        if(this.$store.state.isLogin){
-            this.studentId = this.$store.state.number
-            this.role = sessionStorage.getItem('role')
-        }
-        else this.$message.error('登录会话已过期')
+        if (this.$store.state.isLogin) {
+            const role = sessionStorage.getItem('role')
+            this.isTeacher = role == "teacher"
+            const user = sessionStorage.getItem('user')
+            this.userId = JSON.parse(user).number
+        } else this.$message.error('登录会话已过期')
 
-        //待完成作业课程数、列表
-        if (this.homeworkCourseList.length != 0) {
-            let children = [];
-            this.homeworkCourseList.forEach(function (item) {
-                children.push({
-                    label: item,
-                    children:[]
+
+        if(this.isTeacher){
+            //获取当前角色课程
+            this.$axios.get('/homework/platform/tec/page', {
+                params: {
+                    userId: this.userId
+                }
+            }).then((res) => {
+                // console.log("课程列表",res.data.data)
+                this.courseList = res.data.data
+                //Card展示
+                let arrTmp = [];
+                this.courseList.forEach((item, index) => {
+                    arrTmp.push(item);
+                    if ((index + 1) % this.cardRowNum === 0) {
+                        this.courseCardList.push(arrTmp);
+                        arrTmp = [];
+                    }
                 });
-            });
+                if (arrTmp.length != 0) this.courseCardList.push(arrTmp);
+            })
 
-          this.treedata.push({
-            label: this.homeworkCourseList.length + "门课程有待提交作业",
-            children: children,
-          });
+            //待批改作业课程数、列表
+            // this.$axios.get('/homework/platform/tec/task', {
+            //     params: {
+            //         userId: this.userId
+            //     }
+            // }).then((res) => {
+            //     console.log("待完成作业课程",res.data.data)
+            //     this.homeworkCourseList = res.data.data
+            //     if (this.homeworkCourseList.length != 0) {
+            //         let children = [];
+            //         this.homeworkCourseList.forEach(function (item) {
+            //             children.push({
+            //                 label: item.courseName,
+            //                 children: []
+            //             });
+            //         });
+            //
+            //         this.treedata.push({
+            //             label: this.homeworkCourseList.length + "门课程有待批改作业",
+            //             children: children,
+            //         });
+            //     }
+            // })
+
+        }else{
+            //获取当前角色课程
+            this.$axios.get('/homework/platform/stu/page', {
+                params: {
+                    userId: this.userId
+                }
+            }).then((res) => {
+                // console.log("课程列表",res.data.data)
+                this.courseList = res.data.data
+                //Card展示
+                let arrTmp = [];
+                this.courseList.forEach((item, index) => {
+                    arrTmp.push(item);
+                    if ((index + 1) % this.cardRowNum === 0) {
+                        this.courseCardList.push(arrTmp);
+                        arrTmp = [];
+                    }
+                });
+                if (arrTmp.length != 0) this.courseCardList.push(arrTmp);
+            })
+
+            //待完成作业课程数、列表
+            this.$axios.get('/homework/platform/task', {
+                params: {
+                    userId: this.userId
+                }
+            }).then((res) => {
+                console.log("待完成作业课程",res.data.data)
+                this.homeworkCourseList = res.data.data
+                if (this.homeworkCourseList.length != 0) {
+                    let children = [];
+                    this.homeworkCourseList.forEach(function (item) {
+                        children.push({
+                            label: item.courseName,
+                            children: []
+                        });
+                    });
+
+                    this.treedata.push({
+                        label: this.homeworkCourseList.length + "门课程有待提交作业",
+                        children: children,
+                    });
+                }
+            })
         }
 
-        //根据登录用户获取courseList
 
-        //Card展示
-        let arrTmp = [];
-        this.courseList.forEach((item, index) => {
-            arrTmp.push(item);
-            if ((index + 1) % this.cardRowNum === 0) {
-                this.courseCardList.push(arrTmp);
-                arrTmp = [];
-            }
-        });
-        if (arrTmp.length != 0) this.courseCardList.push(arrTmp);
     },
     methods: {
         handleClick(tab, event) {
@@ -123,7 +180,7 @@ export default {
         showCourseList() {
             this.$router.push({name: 'CourseList'});
         },
-        getHomeWorkList(){
+        getHomeWorkList() {
 
         },
         changeCurrent(val) {
@@ -134,9 +191,24 @@ export default {
             console.log(val);
         },
         //树形组件点击事件
-        handleNodeClick(val){
-            console.log(val);
-            this.$router.push({name: 'HomePage'});
+        handleNodeClick(data,node) {
+            if(node.isLeaf){
+                // console.log("data",data.label);
+                let courseNum=""
+                let courseIndex=""
+                this.homeworkCourseList.forEach(function (item) {
+                    console.log(item)
+                    if(item.courseName == data.label){
+                        // console.log(item)
+                        courseNum = item.courseNum
+                        courseIndex = item.courseIndex
+                    }
+                });
+                sessionStorage.setItem("courseNum",courseNum)
+                sessionStorage.setItem("courseIndex",courseIndex)
+                this.$router.push({name: 'HomePage'});
+
+            }
         }
     },
     computed: {},
@@ -165,7 +237,8 @@ export default {
     font-weight: 600;
     font-size: 14px;
 }
-.back{
+
+.back {
     margin-top: 20px !important;
     margin-left: 50% !important;
 }

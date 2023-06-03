@@ -9,19 +9,19 @@
               <el-link
                 target="_blank"
                 @click="showCoursePage()"
-                ><span class="title-decoration">{{ courseName }}</span></el-link
+                ><span class="title-decoration">{{ course.courseName }}</span></el-link
               >
             </el-row>
             <el-row>
               <el-col :span=6><div class="text">课程编号：</div></el-col>
               <el-col :span=6
-                ><div class="text">{{ number }}</div></el-col
+                ><div class="text">{{ course.courseNum }}</div></el-col
               >
             </el-row>
             <el-row>
               <el-col :span=6><div class="text">主讲教师：</div></el-col>
               <el-col :span=6
-                ><div class="text">{{ teacherName }}</div></el-col
+                ><div class="text">{{ course.teacherName }}</div></el-col
               >
             </el-row>
             <div class="bottom clearfix">
@@ -38,9 +38,12 @@
 export default {
   name: "CourseCard",
   props: {
-    number: String,
-    courseName: String,
-    teacherName: String,
+    course:{
+        courseNum:String,
+        courseName:String,
+        teacherName:String,
+        courseIndex:String
+    }
   },
   data() {
     return {
@@ -49,7 +52,9 @@ export default {
   },
   methods:{
     showCoursePage(){
-      this.$router.push({name: 'HomePage'});
+        sessionStorage.setItem("courseNum",this.course.courseNum)
+        sessionStorage.setItem("courseIndex",this.course.courseIndex)
+        this.$router.push({name:'HomePage'})
     }
   }
 };

@@ -6,6 +6,7 @@
                     :formWidth="formWidth"
                     :formData="formData"
                     :buttons="formButtons"
+                    :formButtonsLoc = "formButtonsLoc"
                     :inline=true
                     class="form"
             >
@@ -39,6 +40,8 @@
                         v-if="item.selection"
                         type="selection"
                         :key="`selection_${index}`"
+                        header-align = "center"
+                        align="center"
                 ></el-table-column>
                 <!-- 序号 -->
                 <el-table-column
@@ -46,6 +49,8 @@
                     type="index"
                     label="序号"
                     :key="`index_${index}`"
+                    header-align = "center"
+                    align="center"
                 >
                     <template v-slot="scope">
                         <span>{{(current - 1) * size + scope.$index + 1}}</span>
@@ -57,11 +62,13 @@
                         align="center"
                         :label="item.label"
                         :key="`multi_${index}`"
+                        header-align = "center"
                 >
                     <el-table-column
                             v-for="(child, childIndex) in item.children"
                             :key="`child_${index}_${childIndex}`"
                             v-bind="child"
+                            header-align = "center"
                     >
                     </el-table-column>
                 </el-table-column>
@@ -70,11 +77,13 @@
                         v-else-if="item.slot"
                         :label="item.label"
                         :key="`index_${index}`"
+                        :fixed="item.fixed"
+                        :width="item.width"
+                        header-align = "center"
                 >
                     <template v-slot="scope">
                         <slot
                                 :name="item.slot"
-                                :fixed="item.fixed"
                                 :height="item.height"
                                 :rows="scope.row"
                         ></slot>
@@ -85,6 +94,7 @@
                         v-else
                         v-bind="item"
                         :key="`normal_${index}`"
+                        header-align = "center"
                 >
 
                 </el-table-column>
@@ -182,6 +192,10 @@ export default {
         formButtons:{
             type:Array,
             default: () => []
+        },
+        formButtonsLoc:{
+            type:String,
+            default: ""
         }
     },
     data() {
@@ -191,12 +205,15 @@ export default {
         }
     },
     methods: {
-        cellStyle: function (e) {  //{row,column,rowIndex,columnIndex}
-            let obj = {};
-            this.$emit("cellStyle", e, (color = {}) => {     //将事件返回到调用组件的页面去判断 应该现实的颜色
-                obj = color;
-            });
-            return obj;
+        cellStyle: function () {  //{row,column,rowIndex,columnIndex}
+            // let obj = {};
+            // this.$emit("cellStyle", e, (color = {}) => {     //将事件返回到调用组件的页面去判断 应该现实的颜色
+            //     obj = color;
+            // });
+            // return obj;
+            // console.log(e)
+
+            return "text-align:center";
         },
         // 切换页码
         handleCurrentChange(val) {
@@ -246,7 +263,7 @@ export default {
         }
     },
     mounted() {
-        console.log("columns", this.columns)
+        // console.log("columns", this.columns)
 
 
     }

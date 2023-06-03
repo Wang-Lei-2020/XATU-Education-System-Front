@@ -3,15 +3,16 @@
         <el-row>
             <div class="htitile">
                 <el-row>
-                    <span style="font-size: 24px;color: #000;">小作业</span>
-                    <span class="text1" style=" color: #f84e5e; margin-left: 51px;">2023-05-31 00:00 提交截止</span>
+                    <span style="font-size: 24px;color: #000;">{{studentHomework.title}}</span>
+                    <span class="text1" style=" color: #f84e5e; margin-left: 51px;">{{studentHomework.deadline}} 提交截止</span>
                 </el-row>
                 <el-row style="margin-top: 20px">
-                    <span class="text1">邸晓飞发布</span>
+                    <span class="text1">{{studentHomework.teacher}}发布</span>
                     <span class="divide"></span>
-                    <span class="text1"> 作业满分100</span>
+                    <span class="text1"> 作业满分{{studentHomework.grade}}</span>
                     <span class="divide"></span>
-                    <span class="text1">仅允许提交一次</span>
+                    <span class="text1" v-if="studentHomework.isRepeat == 0">允许多次提交</span>
+                    <span class="text1" v-if="studentHomework.isRepeat == 1">仅允许提交一次</span>
                 </el-row>
             </div>
 
@@ -19,7 +20,7 @@
         <el-row>
             <div class="hcontent">
                 <h3>作业内容</h3>
-                <div v-html="content"></div>
+                <div v-html="studentHomework.homeworkContent"></div>
             </div>
 
         </el-row>
@@ -28,10 +29,11 @@
             <div class="editor">
                 <Editor
                     @eidtContent="eidtContent"
+                    :detail="detail"
                 ></Editor>
             </div>
             <div class="action">
-                <el-button size="mini" @click="submit">提交</el-button>
+                <el-button size="mini" @click="submit" v-if="studentHomework.isRepeat == 0 || studentHomework.status == 0">提交</el-button>
                 <el-button size="mini" @click="cancel">取消</el-button>
             </div>
         </el-row>
@@ -44,7 +46,7 @@ export default {
     components: {Editor,},
     data() {
         return {
-            content: "<h2>要求：</h2><h2>（1）个人完成</h2><h2>（2）将解答写在纸上</h2><h2>（3）5月31日课上提交</h2><p><img src=\"http://cdn.wanglei99.xyz/FraYnRVJ-C9J2w72dEeLH9Rj1sDi\"></p>",
+            studentHomework: {},
             editorOption: {
                 modules: {
                     toolbar: {
@@ -54,6 +56,8 @@ export default {
                 readyOnly: true,
                 theme: 'snow',
             },
+            content:"",
+            detail:""
         };
     },
     methods: {
@@ -61,18 +65,45 @@ export default {
             event.enable(false);  //设置富文本编辑器不可编辑
         },
         submit(){
-            alert("提交成功")
-            this.$router.push({name: 'HomeworkList'})
+            if(this.content == "")
+                _this.$message.error('作业内容不能为空');
+            const _this = this
+            //发布作业
+            let formData = new FormData()
+            formData.append('homework', this.studentHomework.homework)
+            formData.append('studentNumber', this.studentHomework.student)
+            formData.append('content', this.content)
+            _this.$axios.post('/homework/submit', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                withCredentials: true
+            }).then(function (response) {
+                // 这里是处理正确的回调
+                console.log(response)
+                _this.$message.success('提交成功')
+                _this.$router.push({name: 'HomeworkList'})
+            }).catch(function (response) {
+                // 这里是处理错误的回调
+                _this.$message.error('提交失败');
+                console.log(response)
+            })
 
+            // alert("提交成功")
+            // this.$router.push({name: 'HomeworkList'})
         },
         cancel(){
             this.$router.push({name: 'HomeworkList'})
         },
         eidtContent(val){
-            console.log(val)
+            // console.log(val)
+            this.content = val
         }
     },
     created() {
+        console.log("作业信息", this.$route.params.studentHomework)
+        this.studentHomework = this.$route.params.studentHomework
+        this.detail = this.$route.params.studentHomework.content
     }
 
 }

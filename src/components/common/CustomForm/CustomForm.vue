@@ -9,10 +9,11 @@
                 <!-- 输入框 -->
                 <el-input v-model="ruleForm[item.prop]" :placeholder="item.placeholder" v-if="item.type=='Input' "
                           :style="{width: item.width}" :readonly="item.readonly" :show-password="item.password"
-                          :maxlength="item.maxlength"   show-word-limit
+                          :maxlength="item.maxlength" show-word-limit
                 ></el-input>
                 <!-- 输入框  数字 -->
-                <el-input v-model.number="ruleForm[item.prop]" :placeholder="item.placeholder" v-if="item.type=='Input_number' "
+                <el-input v-model.number="ruleForm[item.prop]" :placeholder="item.placeholder"
+                          v-if="item.type=='Input_number' "
                           :style="{width: item.width}" :readonly="item.readonly" :show-password="item.password"
                 ></el-input>
                 <!-- 选择框 -->
@@ -37,34 +38,37 @@
                 <el-col :span="item.span || 10">
                     <el-input type="textarea" v-model="ruleForm[item.prop]" v-if="item.type=='Textarea'"
                               :placeholder="item.placeholder" :rules="item.rules"
-                              :maxlength="item.maxlength"   show-word-limit></el-input>
+                              :maxlength="item.maxlength" show-word-limit></el-input>
                 </el-col>
 
                 <!-- 三种时间组件 -->
                 <!-- 日期 -->
                 <el-col :span="item.span || 5">
                     <el-date-picker type="date" :placeholder="item.placeholder" v-model="ruleForm[item.prop]"
-                                    style="width: 100%;" v-if="item.type=='Date'"></el-date-picker>
+                                    style="width: 100%;" v-if="item.type=='Date'" :format="item.format"
+                                    :value-format="item.valueFormat" :picker-options="item.pickerOptions"></el-date-picker>
                 </el-col>
                 <!-- 时间 -->
                 <el-col :span="item.span || 5">
                     <el-time-picker :placeholder="item.placeholder" v-model="ruleForm[item.prop]" style="width: 100%;"
-                                    v-if="item.type=='Time'"></el-time-picker>
+                                    v-if="item.type=='Time'" :format="item.format"
+                                    :value-format="item.valueFormat" :picker-options="item.pickerOptions"></el-time-picker>
                 </el-col>
                 <!-- 日期+时间 -->
                 <el-col :span="item.span || 5">
                     <el-date-picker type="datetime" :placeholder="item.placeholder" v-model="ruleForm[item.prop]"
-                                    style="width: 100%;" v-if="item.type=='Datetime'"></el-date-picker>
+                                    style="width: 100%;" v-if="item.type=='Datetime'" :format="item.format"
+                                    :value-format="item.valueFormat"  :picker-options="item.pickerOptions"></el-date-picker>
                 </el-col>
 
 
             </el-form-item>
         </div>
         <!-- 按钮 -->
-        <div class="buttonGroup">
+        <div :style="{ float: formButtonsLoc }">
             <el-form-item>
                 <el-button :type="b.type" @click="callSelf('ruleForm',b.action,b.call)" v-for="(b,k) in buttons"
-                           :key="k" :style="b.style" >{{ b.label }}
+                           :key="k" :style="b.style" :size="b.size">{{ b.label }}
                 </el-button>
             </el-form-item>
         </div>
@@ -95,6 +99,10 @@ export default {
         inline: {
             type: Boolean,
             default: false,
+        },
+        formButtonsLoc:{
+            type:String,
+            default: "left"
         }
     },
     methods: {
