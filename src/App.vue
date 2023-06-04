@@ -13,11 +13,11 @@
       <el-container>
         <el-header class="header">
             <!-- 学生教师端系统的header -->
-            <el-row v-if="!isSystem" style="height: 100%; background-color: #324b4e; width: 100%;">
+            <el-row v-if="!isSystem" style="height: 100%; background-color: #3d686c; width: 100%;">
                 <el-col :span="2" style="min-height: 100%"></el-col>
                 <el-col :span="5" style="min-height: 100%" >
                     <el-col :span="3" style="min-height: 100%; min-width: 60px">
-                        <img style="height: 56px;margin-right: 8%; cursor:pointer;" src="./assets/logo.png" alt="logo" @click="toHome" >
+                        <img style="height: 40px;margin-top: 15%;margin-left: 20%; cursor:pointer;" src="./assets/交大logo1.png" alt="logo" @click="toHome" >
                     </el-col>
                     <el-col :span="18" style="min-height: 100%">
                         <div style="color: gold; margin-top: 17px; font-size: 15px;"  @click="toHome">
@@ -58,11 +58,11 @@
             </el-row>
   
             <!-- 系统端系统的header -->
-            <el-row v-if="isSystem" style="height: 100%; background-color: darkslateblue; width: 100%;">
+            <el-row v-if="isSystem" style="height: 100%; background-color: rgb(86, 78, 140); width: 100%;">
                 <el-col :span="2" style="min-height: 100%"></el-col>
                 <el-col :span="5" style="min-height: 100%">
                     <el-col :span="3" style="min-height: 100%; min-width: 60px">
-                        <img style="height: 56px;margin-right: 8%" src="./assets/logo.png" alt="logo">
+                        <img style="height: 40px;margin-top: 15%;margin-left: 20%; cursor:pointer;" src="./assets/交大logo1.png" alt="logo">
                     </el-col>
                     <el-col :span="18" style="min-height: 100%">
                         <div style="color: gold; margin-top: 17px; font-size: 15px;">

@@ -111,7 +111,7 @@
     width: 100%;
     height: 100%;
     /*padding: 16px 16px 0 16px;*/
-    background-image: url("../../assets/sysLoginBg.jpg");
+    background-image: url("../../assets/南门.png");
     background-size: cover;
     background-position: center center;
   }
