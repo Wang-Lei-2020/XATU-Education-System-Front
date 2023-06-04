@@ -26,6 +26,8 @@ import AddHomework from "@/components/homework/teacher/AddHomework.vue";
 import StudentHomeworkList from "@/components/homework/teacher/StudentHomeworkList.vue";
 import TeacherHomeworkPage from "@/components/homework/teacher/TeacherHomeworkPage.vue";
 import CourseScore from '@/components/course_score/CourseScore'
+import StudentInfo from '@/components/user/StudentInfo'
+import TeacherInfo from '@/components/user/TeacherInfo'
 
 
 Vue.use(VueRouter)
@@ -159,6 +161,14 @@ const routes = [
         path: '/teacherhomeworkpage',
         name: 'TeacherHomeworkPage',
         component: TeacherHomeworkPage
+    },{
+        path: '/studentInfo',
+        name: 'StudentInfo',
+        component: StudentInfo
+    },{
+        path: '/teacherInfo',
+        name: 'TeacherInfo',
+        component: TeacherInfo
     }
 
 ];

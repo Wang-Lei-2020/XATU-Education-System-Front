@@ -10,7 +10,7 @@
         <el-form-item label="确认密码:" prop="checkPwd" class="title">
             <el-input type="password" show-password auto-complete="off" placeholder="请确认新密码" v-model="ruleForm.checkPwd"/>
         </el-form-item>
-        <el-form-item style="float: left; margin-left: 150px;">
+        <el-form-item style="float: left; margin-left: 20px;">
             <el-button v-if="isStudent" type="primary" style="width: 100px;" @click="changeStuPassword()">保存</el-button>
             <el-button v-if="isTeacher" type="primary" style="width: 100px;" @click="changeTeaPassword()">保存</el-button>
             <el-button style="width: 100px; margin-left: 30px;" @click="reset()">重置</el-button>
@@ -212,9 +212,9 @@
   <style scoped>
 .login-box1 {
   border: 3px solid #0c4540;
-  width: 800px;
-  height: 400px;
-  margin: 30px auto;
+  width: 450px;
+  height: 300px;
+  margin: 10px auto;
   padding: 30px 70px 5px 30px;
   border-radius: 20px;
   -webkit-border-radius: 5px;

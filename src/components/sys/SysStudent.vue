@@ -232,10 +232,10 @@
       width="60%"
       :title="Title"
       @close="closeUpdate"
-    >
+    >updateData
        <!--"修改"对话框中的表单-->
       <div style="margin-right: 20px">
-        <el-form :model="updateData" :rules="rules" ref="updateData" label-width="100px">
+        <el-form :model="updateData" :rules="rules" ref="" label-width="100px">
           <el-row>
             <el-col :span="10" :offset="0">
               <el-form-item label="序号" prop="id">

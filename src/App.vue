@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-      <div v-if="photoFlag">
+      <!-- <div v-if="photoFlag">
         <el-dialog
             title="修改头像"
             :visible="photoFlag"
@@ -8,7 +8,7 @@
             @close="closeChangePhoto">
           <ChangePhoto></ChangePhoto>
         </el-dialog>
-      </div>
+      </div> -->
 
       <el-container>
         <el-header class="header">
@@ -49,8 +49,8 @@
                                 {{getUsername}}
                             </template>
                             <el-menu-item index="2-1" v-on:click="toHome">主页</el-menu-item>
-                            <el-menu-item index="2-2" v-on:click="ChangePhoto">修改头像</el-menu-item>
-                            <el-menu-item index="2-3" v-on:click="ChangePasssword">修改密码</el-menu-item>
+                            <!-- <el-menu-item index="2-2" v-on:click="ChangePhoto">修改头像</el-menu-item> -->
+                            <!-- <el-menu-item index="2-3" v-on:click="ChangePasssword">修改密码</el-menu-item> -->
                             <el-menu-item index="2-4" v-on:click="onLogout">注销</el-menu-item>
                         </el-submenu>
                     </el-menu>
@@ -134,7 +134,13 @@
                                 <span>成绩查看</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/userInfo">
+                        <el-menu-item v-if="isStudent" class="submenu" index="/studentInfo">
+                            <template v-slot:title>
+                                <i class="el-icon-info"></i>
+                                <span>个人信息</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item v-if="isTeacher" class="submenu" index="/teacherInfo">
                             <template v-slot:title>
                                 <i class="el-icon-info"></i>
                                 <span>个人信息</span>
@@ -205,12 +211,12 @@
   
   
 <script>
-  import ChangePhoto from "@/components/user/ChangePhoto";
+//   import ChangePhoto from "@/components/user/ChangePhoto";
   import Vue from "vue";
   
   export default {
     name: "App",
-    components:{ChangePhoto},
+    // components:{ChangePhoto},
     data() {
       return {
         photoFlag:false
@@ -417,19 +423,19 @@
                 this.$router.push({name:"SysStudent",params:{isReload: 'true'}});
             }
         },
-        ChangePhoto: function(){
-            this.photoFlag = true;
-        },
+        // ChangePhoto: function(){
+        //     this.photoFlag = true;
+        // },
 
-        closeChangePhoto: function(){
-            this.photoFlag = false;
-        },
+        // closeChangePhoto: function(){
+        //     this.photoFlag = false;
+        // },
 
-        ChangePasssword: function(){
-            if (this.$route.path !== "/changePassword") {
-                this.$router.push({name:"ChangePassword",params:{isReload: 'true'}});
-            }
-        }
+        // ChangePasssword: function(){
+        //     if (this.$route.path !== "/changePassword") {
+        //         this.$router.push({name:"ChangePassword",params:{isReload: 'true'}});
+        //     }
+        // }
     }
 }
   </script>
