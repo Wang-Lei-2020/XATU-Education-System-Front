@@ -28,7 +28,8 @@ import TeacherHomeworkPage from "@/components/homework/teacher/TeacherHomeworkPa
 import CourseScore from '@/components/course_score/CourseScore'
 import StudentInfo from '@/components/user/StudentInfo'
 import TeacherInfo from '@/components/user/TeacherInfo'
-
+import EvaluateCourse from '@/components/evaluate/EvalCourse'
+import ScoredCourse from '@/components/evaluate/ScoredCourse'
 
 Vue.use(VueRouter)
 Vue.use(VueCookies)
@@ -70,6 +71,19 @@ const routes = [
         name: 'CourseSchedule',
         component: CourseSchedule
     },
+
+    {
+        path: '/evaluate',
+        name: 'evalCourse',
+        component: EvaluateCourse
+    },
+
+    {
+        path: '/scoredCourse',
+        name: 'scoredCourse',
+        component: ScoredCourse
+    },
+
     {
         path: '/course_score',
         name: 'courseScore',

@@ -15,7 +15,8 @@ Vue.use(VueSession)
 Vue.use(VueAxios, axios)
 axios.defaults.withCredentials = true
 if(process.env.NODE_ENV === 'development') {
-    axios.defaults.baseURL = 'http://localhost:8902'
+    // axios.defaults.baseURL = 'http://localhost:8902'
+     axios.defaults.baseURL = 'http://localhost:8902'
 } else {
     axios.defaults.baseURL = 'http://114.116.194.209:8902'
 }

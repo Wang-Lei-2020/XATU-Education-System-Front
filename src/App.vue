@@ -122,12 +122,24 @@
                                 <span>课程平台</span>
                             </template>
                         </el-menu-item>
-                        <el-menu-item v-if="isStudent" class="submenu" index="/evaluation">
+                        <el-submenu v-if="isStudent" index="5">
                             <template v-slot:title>
-                                <i class="el-icon-edit"></i>
+                                <i class="el-icon-location"></i>
                                 <span>评教系统</span>
                             </template>
-                        </el-menu-item>
+                            <el-menu-item v-if="isStudent" class="submenu" index="/evaluate">
+                                <template v-slot:title>
+                                    <i class="el-icon-zoom-in"></i>
+                                    <span>课程评教</span>
+                                </template>
+                            </el-menu-item>
+                            <el-menu-item v-if="isStudent" class="submenu" index="/scoredCourse">
+                                <template v-slot:title>
+                                    <i class="el-icon-zoom-in"></i>
+                                    <span>已评课程</span>
+                                </template>
+                            </el-menu-item>
+                        </el-submenu>
                         <el-menu-item v-if="isStudent || isTeacher" class="submenu" index="/course_score">
                             <template v-slot:title>
                                 <i class="el-icon-pie-chart"></i>
