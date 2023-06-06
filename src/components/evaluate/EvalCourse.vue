@@ -96,7 +96,12 @@ export default {
         alert("成绩输入区间不合法")
         return
       }
-      this.$axios.post(`/select/course/studentScoreTeacher?student=${student}&score=${score}&course=${course}`)
+      this.$axios.post(`/evaluation/studentScoreTeacher?student=${student}&score=${score}&course=${course}`,{
+        headers: {
+            "Content-Type": "application/json;charset=utf-8"
+        },
+        withCredentials: true
+      })
         .then((res) => {
           console.log(res)
           if (res.data.code === "0") {
@@ -112,7 +117,12 @@ export default {
     getUnScoreCourseList() {
       this.rTableData = []
       const student = this.$store.state.number;
-      this.$axios.post(`/select/course/studentGetUnscoreCourse?student=${student}`)
+      this.$axios.post(`/evaluation/studentGetUnscoreCourse?student=${student}`,{
+        headers: {
+            "Content-Type": "application/json;charset=utf-8"
+        },
+        withCredentials: true
+      })
         .then((res) => {
           console.log(res)
           const newData = res.data.data.map(item => {

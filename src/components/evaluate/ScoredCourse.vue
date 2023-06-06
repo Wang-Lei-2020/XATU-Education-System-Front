@@ -84,7 +84,12 @@ export default {
 
         getScoreCourseList() {
             const student = this.$store.state.number;
-            this.$axios.post(`/select/course/studentGetScoreCourse?student=${student}`)
+            this.$axios.post(`/evaluation/studentGetScoreCourse?student=${student}`,{
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+                withCredentials: true
+            })
                 .then((res) => {
                     console.log(res)
                     // const newData = res.data.data.map(item => {
