@@ -468,7 +468,7 @@
           <el-upload class="upload-file"
             drag
             ref="uploadExcel"
-            action="http://localhost:8902/sys/tea/import"
+            action="http://114.116.194.209:8902/sys/tea/import"
             :with-credentials="true" 
             :limit=limitNum
             :auto-upload="false"
