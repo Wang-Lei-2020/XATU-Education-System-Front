@@ -136,7 +136,7 @@ export default {
         this.appendMessage(chatGPT);
 
         const sse = createSSE(
-          "http://localhost:8909/chat/sse?prompt=" + chatMsg.msg,
+          "http://123.249.94.218:8909/chat/sse?prompt=" + chatMsg.msg,
           undefined,
           (ev) => {
             if (this.isSend) {
